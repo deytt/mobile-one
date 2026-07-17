@@ -41,6 +41,30 @@ Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/
 
 > *"One codebase. Native experience."*
 
+## Status atual da POC
+
+| Entregável | Status |
+|---|---|
+| Documentação (ADRs, Specs, Pitch) | ✅ Concluído |
+| Design System Figma (3 marcas, 7 telas) | ✅ Concluído |
+| Setup KMP (shared, androidApp, iosApp) | 🔄 Em andamento |
+| UI Android (Compose) | ⏳ Aguardando setup |
+| UI iOS (SwiftUI) | ⏳ Aguardando setup |
+
 ## Figma → Código
 
-As telas da POC são desenhadas no Figma Make pelo desenvolvedor e implementadas via **MCP do Figma**. Sempre que houver uma tela para implementar, verificar se há um arquivo Figma vinculado antes de escrever código de UI manualmente.
+**Arquivo:** `Mobile-One` — fileKey: `i0v5vLAdG0PMWZ6bYwUb0h`
+
+As telas foram criadas no Figma Make com sistema de tokens de cor. Sempre usar `get_design_context` via MCP do Figma antes de implementar qualquer tela. Antes de chamar `get_design_context`, ler a skill `figma-design-to-code`.
+
+### Mapa de nós por tela
+
+| Tela | node-id | URL |
+|---|---|---|
+| Splash | `28:19512` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=28-19512) |
+| Login | `29:20015` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20015) |
+| Biometria | `29:20689` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20689) |
+| Home / Conta | `29:21243` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-21243) |
+| Cartões | `29:22301` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-22301) |
+| Brand Switcher | `29:23293` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-23293) |
+| Fluxo PIX | `15:9848` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=15-9848) |

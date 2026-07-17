@@ -4,7 +4,8 @@
 **Versão:** 1.0  
 **Data:** 2026-07-17  
 **Feature owner:** Time Mobile  
-**Figma:** *(a ser vinculado após criação no Figma Make)*
+**Figma:**
+- Fluxo PIX completo (8 telas): [`15:9848`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=15-9848&m=dev)
 
 ---
 

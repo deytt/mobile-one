@@ -4,7 +4,9 @@
 **Versão:** 1.0  
 **Data:** 2026-07-17  
 **Feature owner:** Time Mobile  
-**Figma:** *(a ser vinculado após criação no Figma Make)*
+**Figma:**
+- Home / Conta: [`29:21243`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-21243&m=dev)
+- Cartões: [`29:22301`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-22301&m=dev)
 
 ---
 
