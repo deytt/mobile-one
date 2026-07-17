@@ -1,0 +1,59 @@
+---
+description: Workflow de desenvolvimento — spec-first, Figma MCP, convenções de commit
+alwaysApply: true
+---
+
+# Workflow de Desenvolvimento
+
+## Metodologia: Spec Driven Development
+
+Toda nova feature segue esta ordem obrigatória:
+
+1. **Spec** → escrever/revisar `docs/specs/SPEC-XXX-nome.md` antes de qualquer código
+2. **ADR** → se houver decisão arquitetural, criar `docs/adr/ADR-XXX-titulo.md`
+3. **Contrato shared** → definir interfaces e `expect` no `shared/commonMain`
+4. **Implementação shared** → use cases, repositórios, `actual` implementations
+5. **Testes shared** → testes que rodam igual em Android e iOS
+6. **UI Android** → Compose consumindo o shared
+7. **UI iOS** → SwiftUI consumindo o shared
+
+## Implementação de UI — Fluxo Figma MCP
+
+Quando há uma tela para implementar:
+1. O dev cria a tela no **Figma Make**
+2. Exporta para o **Figma Design**
+3. O agente usa o **MCP do Figma** (`get_design_context`) para obter as specs de design
+4. Implementa em Compose (Android) e SwiftUI (iOS) a partir do design
+5. **Nunca escrever UI "no olho"** se existir um arquivo Figma disponível
+
+Antes de chamar `get_design_context`, sempre ler a skill `figma-design-to-code`.
+
+## Convenções de commit
+
+```
+feat(shared): adiciona use case de autenticação biométrica
+feat(android): implementa tela de login com Compose
+feat(ios): implementa tela de login com SwiftUI
+fix(shared): corrige validação de CPF no domínio
+docs(adr): adiciona ADR-006 sobre estratégia de cache
+spec(pix): atualiza contrato de transferência PIX
+```
+
+Prefixos: `feat`, `fix`, `docs`, `spec`, `refactor`, `test`, `chore`
+Escopos: `shared`, `android`, `ios`, `docs`, `adr`, `spec`
+
+## Estrutura de documentação
+
+```
+docs/
+├── adr/          # Architecture Decision Records — decisões e argumentos
+├── specs/        # Especificações de features e contratos de interface
+└── poc-pitch/    # Material de apresentação para gestores
+```
+
+## Regras de qualidade
+
+- Todo use case em `shared` deve ter teste unitário que rode em ambas as plataformas
+- Nenhum `TODO` sem issue associada
+- PRs pequenos e focados — uma spec por PR
+- O percentual de código compartilhado deve ser medido e documentado no `poc-pitch`

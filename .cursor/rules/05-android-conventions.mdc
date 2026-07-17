@@ -1,0 +1,68 @@
+---
+description: Convenções Jetpack Compose e Android para o módulo androidApp
+globs: androidApp/**/*.kt
+alwaysApply: false
+---
+
+# Convenções Android — Jetpack Compose
+
+## Estrutura de uma tela
+
+```kotlin
+// ✅ CORRETO — separação clara entre stateful e stateless
+@Composable
+fun LoginScreen(viewModel: LoginViewModel = koinViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    LoginContent(
+        uiState = uiState,
+        onLoginClick = viewModel::onLoginClick,
+        onBiometricClick = viewModel::onBiometricClick
+    )
+}
+
+@Composable
+fun LoginContent(
+    uiState: LoginUiState,
+    onLoginClick: (String, String) -> Unit,
+    onBiometricClick: () -> Unit
+) { /* UI pura, sem lógica */ }
+```
+
+## ViewModel consumindo shared
+
+```kotlin
+class LoginViewModel(
+    private val authenticateUser: AuthenticateUserUseCase // do shared
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    fun onLoginClick(cpf: String, password: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            authenticateUser(cpf, password)
+                .onSuccess { _uiState.update { it.copy(isAuthenticated = true) } }
+                .onFailure { error -> _uiState.update { it.copy(error = error.toUiMessage()) } }
+        }
+    }
+}
+```
+
+## White-label theme
+
+```kotlin
+// Consumir sempre via MaterialTheme — nunca hardcode de cor
+Text(
+    text = "Saldo",
+    color = MaterialTheme.colorScheme.primary // ✅
+    // color = Color(0xFF0066CC)              // ❌
+)
+```
+
+## Regras
+
+- Preview (`@Preview`) obrigatório para todo componente reutilizável
+- Telas implementadas a partir do design Figma via MCP — não inventar layout
+- `ViewModel` nunca importa nada de `android.*` além do necessário para `ViewModel`
+- Navegação via `NavController` — sem `startActivity` direto entre features

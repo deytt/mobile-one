@@ -1,0 +1,76 @@
+---
+description: Convenções SwiftUI e iOS para o módulo iosApp
+globs: iosApp/**/*.swift
+alwaysApply: false
+---
+
+# Convenções iOS — SwiftUI
+
+## Estrutura de uma tela
+
+```swift
+// ✅ CORRETO — View consume ViewModel, sem lógica direta
+struct LoginView: View {
+    @StateObject private var viewModel = LoginViewModel()
+
+    var body: some View {
+        LoginContent(
+            uiState: viewModel.uiState,
+            onLoginTap: viewModel.onLoginTap,
+            onBiometricTap: viewModel.onBiometricTap
+        )
+    }
+}
+
+struct LoginContent: View {
+    let uiState: LoginUiState
+    let onLoginTap: (String, String) -> Void
+    let onBiometricTap: () -> Void
+
+    var body: some View { /* UI pura */ }
+}
+```
+
+## ViewModel consumindo shared KMP
+
+```swift
+@MainActor
+final class LoginViewModel: ObservableObject {
+    @Published private(set) var uiState = LoginUiState()
+
+    private let authenticateUser: AuthenticateUserUseCase // do shared KMP
+
+    init(authenticateUser: AuthenticateUserUseCase = .init()) {
+        self.authenticateUser = authenticateUser
+    }
+
+    func onLoginTap(cpf: String, password: String) {
+        Task {
+            uiState = uiState.copy(isLoading: true)
+            do {
+                let result = try await authenticateUser.invoke(cpf: cpf, password: password)
+                uiState = uiState.copy(isAuthenticated: true)
+            } catch {
+                uiState = uiState.copy(error: error.localizedDescription)
+            }
+        }
+    }
+}
+```
+
+## White-label theme
+
+```swift
+// Consumir sempre via Environment/Theme — nunca hardcode de cor
+Text("Saldo")
+    .foregroundStyle(Color("primaryColor")) // via Assets.xcassets dinâmico ✅
+    // .foregroundStyle(Color(hex: "#0066CC")) // ❌
+```
+
+## Regras
+
+- `#Preview` obrigatório para todo componente reutilizável
+- Telas implementadas a partir do design Figma via MCP — não inventar layout
+- `ViewModel` marcado com `@MainActor` sempre
+- `ObservableObject` apenas para ViewModels — nunca para entidades de domínio
+- Navegação via `NavigationStack` / `NavigationPath` — nunca sheet/fullscreen sem necessidade de UX
