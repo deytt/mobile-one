@@ -1,0 +1,68 @@
+---
+description: Convenções Kotlin e KMP para o módulo shared
+globs: shared/**/*.kt
+alwaysApply: false
+---
+
+# Convenções KMP — shared
+
+## Estrutura de um Use Case
+
+```kotlin
+// ✅ CORRETO — use case com resultado tipado
+class GetAccountBalanceUseCase(
+    private val accountRepository: AccountRepository
+) {
+    suspend operator fun invoke(accountId: String): Result<Balance> =
+        accountRepository.getBalance(accountId)
+}
+
+// ❌ ERRADO — lançar exceção genérica sem tipo
+class GetAccountBalanceUseCase(private val repo: AccountRepository) {
+    suspend fun execute(id: String) = repo.getBalance(id) // sem Result
+}
+```
+
+## Erros de domínio
+
+Sempre usar sealed class para erros — nunca `Exception` genérica exposta ao domínio:
+
+```kotlin
+sealed class BankingError {
+    data class NetworkError(val code: Int, val message: String) : BankingError()
+    object Unauthorized : BankingError()
+    object InsufficientFunds : BankingError()
+    data class ValidationError(val field: String, val reason: String) : BankingError()
+}
+```
+
+## Flow e Coroutines
+
+- Repositórios retornam `Flow<T>` para dados observáveis e `suspend fun` para operações pontuais
+- Nunca expor `MutableStateFlow` fora do módulo — sempre `StateFlow` (imutável)
+- `ViewModel` do shared usa `viewModelScope` ou `CoroutineScope` com `SupervisorJob`
+
+## Nomenclatura
+
+| Tipo | Convenção | Exemplo |
+|---|---|---|
+| Entidade | Substantivo simples | `Account`, `Transaction`, `Balance` |
+| Use case | Verbo + substantivo + UseCase | `GetBalanceUseCase`, `AuthenticateUserUseCase` |
+| Repositório (interface) | Substantivo + Repository | `AccountRepository` |
+| Repositório (impl) | Substantivo + RepositoryImpl | `AccountRepositoryImpl` |
+| DTO | Substantivo + Dto | `AccountDto`, `TransactionDto` |
+| Mapper | Substantivo + Mapper | `AccountMapper` |
+
+## Injeção de dependência (Koin)
+
+```kotlin
+val domainModule = module {
+    factory { GetAccountBalanceUseCase(get()) }
+    factory { AuthenticateUserUseCase(get(), get()) }
+}
+
+val dataModule = module {
+    single<AccountRepository> { AccountRepositoryImpl(get(), get()) }
+    single { BankApiClient(get()) }
+}
+```

@@ -1,0 +1,46 @@
+---
+description: Contexto central do projeto mobile-one — objetivo, motivação e público-alvo
+alwaysApply: true
+---
+
+# mobile-one — Contexto do Projeto
+
+## O que é este projeto
+
+**mobile-one** é uma POC (Proof of Concept) criada para demonstrar aos gestores de um banco que existe uma alternativa técnica sólida ao React Native para construção de um aplicativo bancário cross-platform e white-label.
+
+## Motivação
+
+Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/Swift) para React Native. O time de desenvolvimento — composto por especialistas Android e iOS — criou esta POC para demonstrar que é possível:
+
+- Compartilhar **70–80% do código** (camadas de dados e domínio via KMP)
+- Manter **UI 100% nativa** (Compose no Android, SwiftUI no iOS)
+- Preservar o **know-how técnico** do time atual
+- Entregar **performance nativa total** sem bridges JavaScript
+- Construir uma arquitetura **white-label** real
+
+## Público-alvo da POC
+
+- Gestores não-técnicos → precisam ver métricas, comparativos e uma feature funcionando
+- Arquitetos de software do banco → precisam ver os ADRs e as specs de interface
+- Time de desenvolvimento → precisam ver que a curva de aprendizado é gerenciável
+
+## Stack decidida
+
+| Camada | Tecnologia |
+|---|---|
+| Shared (dados + domínio) | Kotlin Multiplatform (KMP) |
+| Android UI | Jetpack Compose |
+| iOS UI | SwiftUI |
+| HTTP client | Ktor (KMP) |
+| Persistência local | SQLDelight (KMP) |
+| Injeção de dependência | Koin (KMP) |
+| Async | Kotlin Coroutines + Flow |
+
+## Motto do projeto
+
+> *"One codebase. Native experience."*
+
+## Figma → Código
+
+As telas da POC são desenhadas no Figma Make pelo desenvolvedor e implementadas via **MCP do Figma**. Sempre que houver uma tela para implementar, verificar se há um arquivo Figma vinculado antes de escrever código de UI manualmente.

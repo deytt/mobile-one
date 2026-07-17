@@ -1,0 +1,80 @@
+---
+description: Arquitetura de camadas do mobile-one — KMP shared, Android e iOS
+alwaysApply: true
+---
+
+# Arquitetura mobile-one
+
+## Estrutura de módulos
+
+```
+mobile-one/
+├── shared/                      # KMP — Kotlin Multiplatform
+│   ├── commonMain/              # Código 100% compartilhado
+│   │   ├── domain/
+│   │   │   ├── entity/          # Entidades de negócio
+│   │   │   ├── usecase/         # Use cases (regras de negócio)
+│   │   │   ├── repository/      # Interfaces de repositório
+│   │   │   └── error/           # Erros de domínio tipados
+│   │   └── data/
+│   │       ├── remote/          # API clients (Ktor), DTOs, mappers
+│   │       ├── local/           # SQLDelight schemas e DAOs
+│   │       └── repository/      # Implementações dos repositórios
+│   ├── androidMain/             # actual implementations para Android
+│   └── iosMain/                 # actual implementations para iOS
+├── androidApp/                  # Android — Jetpack Compose
+│   ├── ui/
+│   │   ├── screen/              # Telas (uma pasta por feature)
+│   │   ├── component/           # Componentes reutilizáveis
+│   │   └── theme/               # Tema white-label (cores, tipografia)
+│   └── viewmodel/               # ViewModels que consomem shared UseCases
+└── iosApp/                      # iOS — SwiftUI
+    ├── Views/                   # Telas SwiftUI
+    ├── Components/              # Componentes reutilizáveis
+    ├── Theme/                   # Tema white-label
+    └── ViewModel/               # ObservableObjects que consomem shared
+```
+
+## Regras de dependência (obrigatórias)
+
+- `shared/domain` NÃO depende de `shared/data` — apenas o inverso
+- `shared` NÃO depende de nenhum módulo nativo (`androidApp` ou `iosApp`)
+- `androidApp` e `iosApp` dependem de `shared`, nunca um do outro
+- UI (Compose/SwiftUI) NÃO contém regras de negócio — apenas observa estado
+
+## Padrão expect/actual
+
+Para código que depende de APIs nativas (biometria, crypto, keystore):
+
+```kotlin
+// shared/commonMain — contrato
+expect class BiometricAuthenticator {
+    suspend fun authenticate(reason: String): BiometricResult
+}
+
+// shared/androidMain — implementação Android
+actual class BiometricAuthenticator {
+    actual suspend fun authenticate(reason: String): BiometricResult { ... }
+}
+
+// shared/iosMain — implementação iOS
+actual class BiometricAuthenticator {
+    actual suspend fun authenticate(reason: String): BiometricResult { ... }
+}
+```
+
+## White-label
+
+A configuração white-label fica em `shared/commonMain/config/WhiteLabelConfig.kt`:
+- Cores primárias e secundárias como tokens
+- Nome do banco, logos (referência por string)
+- Feature flags por cliente
+- A UI nativa consome `WhiteLabelConfig` para aplicar o tema
+
+## Contratos de UI (shared → nativa)
+
+O shared expõe **apenas** através de:
+- `StateFlow<UiState>` para estado observável
+- `suspend fun` para ações do usuário
+- Sealed classes para eventos de navegação
+- Nunca expõe View, Context, UIViewController ou qualquer tipo de plataforma
