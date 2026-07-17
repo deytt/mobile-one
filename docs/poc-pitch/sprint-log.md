@@ -44,23 +44,35 @@
 
 ---
 
-## Sprint 1 — Setup KMP + Fundação Shared
+## Sprint 1 — Setup KMP + Fundação Shared (scaffolding) ✅ CONCLUÍDO (parte 1/2)
 
-*Em andamento — executado em agente dedicado*
+*Escopo executado: fundação/scaffolding do projeto KMP. O domínio de negócio (entidades, use
+cases, validadores, fake repositories, WhiteLabelConfig) fica para PRs seguintes, um por spec
+(SPEC-001 a SPEC-004), conforme o workflow "spec-driven" e a regra de PRs pequenos e focados.*
 
-### Planejado
-- [ ] Configuração do projeto KMP (Gradle multiplatform — `shared`, `androidApp`, `iosApp`)
-- [ ] `libs.versions.toml` com Ktor, SQLDelight, Koin, Coroutines
-- [ ] `WhiteLabelConfig` com as 3 marcas (tokens extraídos do Figma)
-- [ ] JSON bundled das 3 marcas em `shared/commonMain/resources/white_label/`
+### Entregue (scaffolding)
+- [x] Configuração do projeto KMP (Gradle multiplatform — `shared`, `androidApp`, `iosApp`)
+- [x] `libs.versions.toml` com Kotlin 2.3.21, AGP 8.13.2, Ktor 3.5.1, SQLDelight 2.3.2, Koin 4.2.2, Coroutines 1.11.0
+- [x] `shared`: targets Android + iOS (arm64/simulatorArm64/x64), framework nativo exportado
+- [x] Placeholders `expect/actual`: `Platform`, `DatabaseDriverFactory` (SQLDelight), `createHttpClientEngine` (Ktor) — validam o padrão do ADR-005 antes de qualquer implementação real
+- [x] `initKoin` compartilhado (módulo vazio por ora)
+- [x] Estrutura de pacotes `domain/{entity,usecase,repository,error}` e `data/{remote,local,repository}` (vazias, com README de convenção)
+- [x] Testes smoke em `commonTest` rodando via `./gradlew :shared:allTests` (Android + iOS Simulator)
+- [x] `androidApp` (Jetpack Compose) consumindo o `shared` — tela "Hello, mobile-one!" com `Platform().name`
+- [x] `iosApp` (SwiftUI, projeto gerado via XcodeGen) consumindo o `shared` — mesma tela, build e execução validados no simulador iOS
+- [x] `.github/workflows/ci.yml` com jobs `android` (ubuntu-latest) e `ios` (macos-latest)
+
+### Planejado para PRs seguintes (por spec)
+- [ ] `WhiteLabelConfig` com as 3 marcas (tokens extraídos do Figma) — SPEC-004
+- [ ] JSON bundled das 3 marcas em `shared/commonMain/resources/white_label/` — SPEC-004
 - [ ] Entidades de domínio: `Account`, `Transaction`, `AuthToken`, `PixTransfer`
 - [ ] Interfaces de repositório: `AuthRepository`, `AccountRepository`, `PixRepository`
 - [ ] Fake repositories para todas as features
-- [ ] `LoginWithCredentialsUseCase` + `LoginWithBiometricUseCase` + testes
-- [ ] `ObserveAccountUseCase` + `GetTransactionHistoryUseCase` + testes
-- [ ] `ValidatePixKeyUseCase` + validadores (CPF, CNPJ, email, UUID) + testes
-- [ ] `BiometricAuthenticator` (expect/actual)
-- [ ] `SecureStorage` (expect/actual)
+- [ ] `LoginWithCredentialsUseCase` + `LoginWithBiometricUseCase` + testes — SPEC-001
+- [ ] `ObserveAccountUseCase` + `GetTransactionHistoryUseCase` + testes — SPEC-002
+- [ ] `ValidatePixKeyUseCase` + validadores (CPF, CNPJ, email, UUID) + testes — SPEC-003
+- [ ] `BiometricAuthenticator` (expect/actual real) — ADR-005
+- [ ] `SecureStorage` (expect/actual real) — ADR-005
 - [ ] Koin modules: `domainModule`, `fakeDataModule`
 
 ### Referências para implementação
@@ -71,16 +83,16 @@
 - Spec White-label: [`docs/specs/SPEC-004-white-label-config.md`](../specs/SPEC-004-white-label-config.md)
 - ADR KMP vs RN: [`docs/adr/ADR-001-kmp-vs-react-native.md`](../adr/ADR-001-kmp-vs-react-native.md)
 
-### Métricas (a preencher ao final)
+### Métricas (scaffolding — sem domínio de negócio ainda)
 
 | Métrica | Valor |
 |---|---|
-| Linhas no shared | — |
-| Linhas no androidApp | — |
-| Linhas no iosApp | — |
-| % compartilhado | — |
-| Cobertura de testes shared | — |
-| Módulos KMP configurados | — |
+| Linhas no shared (`.kt` + `.sq`) | 172 (14 arquivos) |
+| Linhas no androidApp (`.kt`) | 82 (3 arquivos) |
+| Linhas no iosApp (`.swift`) | 33 (2 arquivos) |
+| % compartilhado (shared / total de código) | ~60% (172 / 287) — esperado subir para 70–80% conforme entidades/use cases entrarem por spec |
+| Cobertura de testes shared | 3 testes smoke (Platform, HttpClient, Koin), rodando em Android + iOS Simulator |
+| Módulos KMP configurados | `shared` (Android + iosArm64/iosSimulatorArm64/iosX64), `androidApp`, `iosApp` |
 
 ---
 

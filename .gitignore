@@ -1,0 +1,24 @@
+# Gradle / Kotlin
+.gradle/
+build/
+*/build/
+!gradle/wrapper/gradle-wrapper.jar
+.kotlin/
+local.properties
+*.hprof
+
+# Android
+*.apk
+*.aab
+captures/
+
+# Xcode / XcodeGen
+# iosApp.xcodeproj é GERADO a partir de iosApp/project.yml via `xcodegen generate` — não versionar.
+iosApp/*.xcodeproj/
+iosApp/Generated-Info.plist
+iosApp/**/xcuserdata/
+DerivedData/
+*.xcuserstate
+
+# macOS
+.DS_Store
