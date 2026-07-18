@@ -8,5 +8,6 @@ hardcoded — sempre via `MaterialTheme.colorScheme` / `shapes` / `typography`.
 | `Color.kt` | 8 tokens de cor → `ColorScheme` |
 | `Shape.kt` | `borderRadiusDp` → `Shapes` (small/medium/large) |
 | `Typography.kt` | Roboto / Inter / Georgia (Gelasio) → `Typography` |
+| `SplashGradient.kt` | Gradiente radial da Splash por marca (SPEC-006) |
 | `LocalWhiteLabelConfig.kt` | CompositionLocal da marca ativa |
 | `BankTheme.kt` | Wrapper `MaterialTheme` + CompositionLocal |

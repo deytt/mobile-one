@@ -2,6 +2,7 @@ package com.mobileone.android
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.fragment.app.FragmentActivity
@@ -17,6 +18,7 @@ import org.koin.android.ext.android.getKoin
  */
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val appStateRepository = getKoin().get<AppStateRepository>()
         setContent {
