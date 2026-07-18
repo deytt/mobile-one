@@ -6,12 +6,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import com.mobileone.shared.config.WhiteLabelConfig
 
 /**
- * Ponto único de aplicação do tema white-label (SPEC-004) na UI Android. Fornece dois
- * contratos para os composables descendentes:
- * - `MaterialTheme.colorScheme` / `MaterialTheme.shapes` — cores e formas já resolvidas
- *   (nunca ler `config.theme.colorPrimary` diretamente na UI).
- * - [LocalWhiteLabelConfig] — para ler `brandName`, `logoAsset`, `features` (feature flags),
- *   etc.
+ * Ponto único de aplicação do tema white-label (SPEC-004 / SPEC-005) na UI Android.
+ * Fornece aos composables descendentes:
+ * - `MaterialTheme.colorScheme` / `shapes` / `typography` — tokens já resolvidos da marca
+ *   ativa (nunca ler `config.theme.colorPrimary` diretamente na UI).
+ * - [LocalWhiteLabelConfig] — para `brandName`, `logoAsset`, `features`, etc.
  */
 @Composable
 fun BankTheme(
@@ -22,6 +21,7 @@ fun BankTheme(
         MaterialTheme(
             colorScheme = config.theme.toColorScheme(),
             shapes = config.theme.toShapes(),
+            typography = config.theme.toTypography(),
             content = content
         )
     }

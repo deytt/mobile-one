@@ -1,10 +1,10 @@
 package com.mobileone.shared.config
 
 /**
- * Catálogo das 3 marcas da POC (SPEC-004). Os tokens de [ThemeTokens] seguem a tabela de
- * referência extraída do Figma em `.cursor/rules/02-architecture.mdc` — fonte de verdade para
- * valores de código. `colorPrimaryVariant` não tem token próprio no Figma ainda; usamos o
- * mesmo valor de `colorPrimary` como placeholder até existir um tom de variante definido.
+ * Catálogo das 3 marcas da POC (SPEC-004 / SPEC-005). Os tokens de [ThemeTokens] seguem a
+ * tabela da SPEC-005 (extraída do Figma). `colorPrimaryVariant` não tem token próprio no
+ * Figma ainda; usamos o mesmo valor de `colorPrimary` como placeholder até existir um tom
+ * de variante definido.
  *
  * Nesta fundação (SPEC-004) as marcas são factories Kotlin em memória, sem I/O de plataforma.
  * O carregamento a partir de JSON bundled (um arquivo por marca em `resources/white_label`,
@@ -107,8 +107,8 @@ object BrandCatalog {
         logoAsset = "logo_banco_premium",
         logoUrl = null,
         theme = ThemeTokens(
-            colorPrimary = "#782D00",
-            colorPrimaryVariant = "#782D00",
+            colorPrimary = "#7B2D00",
+            colorPrimaryVariant = "#7B2D00",
             colorSecondary = "#C9A84C",
             colorBackground = "#FAFAF8",
             colorSurface = "#FFFFFF",

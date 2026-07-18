@@ -36,7 +36,7 @@ class BrandCatalogTest {
     fun bancoPremiumDeveHabilitarTodasAsFeaturesEFlagVip() {
         val config = BrandCatalog.bancoPremium()
         assertEquals("banco_premium", config.brandId)
-        assertEquals("#782D00", config.theme.colorPrimary)
+        assertEquals("#7B2D00", config.theme.colorPrimary)
         assertTrue(config.features.investmentsEnabled)
         assertTrue(config.features.isVipClient)
     }
