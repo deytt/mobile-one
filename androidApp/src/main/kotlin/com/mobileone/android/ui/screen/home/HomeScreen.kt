@@ -67,6 +67,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HomeScreen(
     onBrandSwitcherClick: () -> Unit,
+    onPixClick: () -> Unit = {},
     onLogoutClick: () -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
@@ -78,6 +79,7 @@ fun HomeScreen(
         onToggleBalance = viewModel::onToggleBalance,
         onDismissError = viewModel::onDismissError,
         onBrandSwitcherClick = onBrandSwitcherClick,
+        onPixClick = onPixClick,
         onLogoutClick = onLogoutClick
     )
 }
@@ -91,6 +93,7 @@ fun HomeContent(
     onToggleBalance: () -> Unit,
     onDismissError: () -> Unit,
     onBrandSwitcherClick: () -> Unit,
+    onPixClick: () -> Unit = {},
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -188,6 +191,7 @@ fun HomeContent(
                 item(key = "quick_actions") {
                     QuickActionsRow(
                         features = config.features,
+                        onPixClick = onPixClick,
                         modifier = Modifier.padding(bottom = 20.dp)
                     )
                 }
