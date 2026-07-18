@@ -4,7 +4,10 @@
 **Versão:** 1.0  
 **Data:** 2026-07-17  
 **Feature owner:** Time Mobile  
-**Figma:** *(a ser vinculado após criação no Figma Make)*
+**Figma:**
+- Login: [`29:20015`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20015&m=dev)
+- Biometria: [`29:20689`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20689&m=dev)
+- Splash: [`28:19512`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=28-19512&m=dev)
 
 ---
 

@@ -59,6 +59,29 @@ mobile-one/
 | Injeção de dependência | Koin |
 | Async | Kotlin Coroutines + Flow |
 
+## Como rodar o projeto
+
+Pré-requisitos: JDK 17, Android SDK (`ANDROID_HOME`), Xcode e [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+
+```bash
+# Shared — compilar e testar (Android + iOS Simulator)
+./gradlew :shared:build
+./gradlew :shared:allTests
+
+# Android — gerar o APK debug
+./gradlew :androidApp:assembleDebug
+
+# iOS — gerar o projeto Xcode e buildar para o simulador
+cd iosApp
+xcodegen generate
+xcodebuild -project iosApp.xcodeproj -scheme iosApp \
+  -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
+```
+
+O `iosApp.xcodeproj` é gerado a partir de `iosApp/project.yml` (não é versionado à mão) e
+possui uma fase de build que roda `./gradlew :shared:embedAndSignAppleFrameworkForXcode`
+automaticamente antes de compilar o app, para embutir o framework `shared` mais recente.
+
 ## Workflow de desenvolvimento
 
 1. Escrever/revisar a **spec** em `docs/specs/` antes de qualquer código

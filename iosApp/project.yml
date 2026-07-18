@@ -1,0 +1,47 @@
+name: iosApp
+options:
+  bundleIdPrefix: com.mobileone
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+
+targets:
+  iosApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: iosApp
+        excludes:
+          - "**/README.md"
+    info:
+      path: Generated-Info.plist
+      properties:
+        CFBundleDisplayName: mobile-one
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mobileone.ios
+        FRAMEWORK_SEARCH_PATHS: "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)"
+        # -lsqlite3: o driver nativo do SQLDelight (sqliter) usa cinterop com libsqlite3;
+        # como o framework shared é estático, o linker do app precisa da flag explicitamente.
+        OTHER_LDFLAGS: "$(inherited) -framework shared -lsqlite3"
+    preBuildScripts:
+      - name: "Compile Kotlin Framework (shared)"
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "YES" = "$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED" ]; then
+            echo "Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \"YES\""
+            exit 0
+          fi
+          cd "$SRCROOT/.."
+          ./gradlew :shared:embedAndSignAppleFrameworkForXcode

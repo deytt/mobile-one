@@ -1,0 +1,52 @@
+package com.mobileone.android.ui.theme
+
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.mobileone.shared.config.ThemeTokens
+
+/**
+ * Converte os tokens agnósticos de plataforma ([ThemeTokens]) para um [ColorScheme] do
+ * Material 3. [ThemeTokens] não define `onSecondary`/`onSurface`/`onError` — usamos defaults
+ * derivados (documentados abaixo) até o design system trazer esses tokens explicitamente.
+ */
+fun ThemeTokens.toColorScheme(): ColorScheme {
+    val primary = colorPrimary.toComposeColor()
+    val primaryVariant = colorPrimaryVariant.toComposeColor()
+    val secondary = colorSecondary.toComposeColor()
+    val background = colorBackground.toComposeColor()
+    val surface = colorSurface.toComposeColor()
+    val error = colorError.toComposeColor()
+    val onPrimary = colorOnPrimary.toComposeColor()
+    val onBackground = colorOnBackground.toComposeColor()
+
+    return lightColorScheme(
+        primary = primary,
+        onPrimary = onPrimary,
+        primaryContainer = primaryVariant,
+        onPrimaryContainer = onPrimary,
+        secondary = secondary,
+        onSecondary = onPrimary,
+        background = background,
+        onBackground = onBackground,
+        surface = surface,
+        onSurface = onBackground,
+        error = error,
+        onError = onPrimary
+    )
+}
+
+/**
+ * Converte [ThemeTokens.borderRadiusDp] nas três escalas de [Shapes] do Material 3
+ * (small/medium/large), seguindo a proporção descrita na SPEC-004.
+ */
+fun ThemeTokens.toShapes(): Shapes = Shapes(
+    small = RoundedCornerShape((borderRadiusDp / 2).dp),
+    medium = RoundedCornerShape(borderRadiusDp.dp),
+    large = RoundedCornerShape((borderRadiusDp * 2).dp)
+)
+
+private fun String.toComposeColor(): Color = Color(android.graphics.Color.parseColor(this))

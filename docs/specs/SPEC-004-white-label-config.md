@@ -4,7 +4,9 @@
 **Versão:** 1.0  
 **Data:** 2026-07-17  
 **Feature owner:** Time Mobile  
-**Figma:** *(a ser vinculado após criação no Figma Make)*
+**Figma:**
+- Brand Switcher (Dev Mode): [`29:23293`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-23293&m=dev)
+- Design System (tokens das 3 marcas): [`docs/figma/design-system.md`](../figma/design-system.md)
 
 ---
 

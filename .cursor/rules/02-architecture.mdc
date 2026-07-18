@@ -65,11 +65,32 @@ actual class BiometricAuthenticator {
 
 ## White-label
 
-A configuração white-label fica em `shared/commonMain/config/WhiteLabelConfig.kt`:
-- Cores primárias e secundárias como tokens
-- Nome do banco, logos (referência por string)
-- Feature flags por cliente
-- A UI nativa consome `WhiteLabelConfig` para aplicar o tema
+A configuração white-label fica em `shared/commonMain/config/WhiteLabelConfig.kt`. Os tokens abaixo são extraídos diretamente do Figma (fileKey: `i0v5vLAdG0PMWZ6bYwUb0h`) e devem ser usados como valores de referência no código.
+
+### Tokens das 3 marcas da POC
+
+| Token | Banco Principal | Fintech Verde | Banco Premium |
+|---|---|---|---|
+| `colorPrimary` | `#003B6F` | `#00A86B` | `#782D00` |
+| `colorSecondary` | `#F7941D` | `#1A1A2E` | `#C9A84C` |
+| `colorBackground` | `#F5F7FA` | `#F0FAF5` | `#FAFAF8` |
+| `colorSurface` | `#FFFFFF` | `#FFFFFF` | `#FFFFFF` |
+| `colorOnPrimary` | `#FFFFFF` | `#FFFFFF` | `#FFFFFF` |
+| `colorOnBackground` | `#1A1A2E` | `#1A1A2E` | `#1A1A1A` |
+| `colorOnSurface` | `#6B7280` | `#6B7280` | `#6B6B6B` |
+| `colorError` | `#DC2626` | `#EF4444` | `#B91C1C` |
+| `fontFamily` | `Roboto` | `Inter` | `Georgia` |
+| `borderRadiusDp` | `12` | `16` | `4` |
+| `brandId` | `banco_principal` | `fintech_verde` | `banco_premium` |
+| `brandName` | `Banco Principal` | `Fintech Verde` | `Banco Premium` |
+
+### Logo identifiers (assets bundled no app)
+
+| Marca | logoAsset |
+|---|---|
+| Banco Principal | `logo_banco_principal` |
+| Fintech Verde | `logo_fintech_verde` |
+| Banco Premium | `logo_banco_premium` |
 
 ## Contratos de UI (shared → nativa)
 
