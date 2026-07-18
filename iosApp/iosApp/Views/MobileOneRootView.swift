@@ -6,6 +6,7 @@ private enum AppRoute: Hashable {
     case biometricWelcome
     case home
     case brandSwitcher
+    case pix
 }
 
 /// Raiz de navegação do app (SPEC-001 + SPEC-002):
@@ -68,6 +69,9 @@ struct MobileOneRootView: View {
                 onBrandSwitcherTap: {
                     path.append(AppRoute.brandSwitcher)
                 },
+                onPixTap: {
+                    path.append(AppRoute.pix)
+                },
                 onLogoutTap: {
                     authViewModel.onLogoutTap()
                     path = NavigationPath([AppRoute.login])
@@ -83,6 +87,8 @@ struct MobileOneRootView: View {
                     path.removeLast()
                 }
             )
+        case .pix:
+            PixFlowView(onClose: { path.removeLast() })
         }
     }
 

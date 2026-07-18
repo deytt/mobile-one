@@ -3,18 +3,19 @@ import shared
 
 struct QuickActionsGrid: View {
     let features: FeatureFlags
+    var onPixTap: () -> Void = {}
     @Environment(\.whiteLabelConfig) private var config
 
     var body: some View {
         HStack(spacing: 8) {
             if features.pixEnabled {
-                QuickActionButton(label: "PIX", systemImage: "qrcode")
+                QuickActionButton(label: "PIX", systemImage: "qrcode", action: onPixTap)
             }
-            QuickActionButton(label: "Transferir", systemImage: "arrow.left.arrow.right")
+            QuickActionButton(label: "Transferir", systemImage: "arrow.left.arrow.right", action: {})
             if features.creditCardEnabled {
-                QuickActionButton(label: "Pagar", systemImage: "creditcard")
+                QuickActionButton(label: "Pagar", systemImage: "creditcard", action: {})
             }
-            QuickActionButton(label: "Recarga", systemImage: "iphone")
+            QuickActionButton(label: "Recarga", systemImage: "iphone", action: {})
         }
     }
 }
@@ -22,10 +23,11 @@ struct QuickActionsGrid: View {
 private struct QuickActionButton: View {
     let label: String
     let systemImage: String
+    let action: () -> Void
     @Environment(\.whiteLabelConfig) private var config
 
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             VStack(spacing: 4) {
                 Image(systemName: systemImage)
                     .font(.system(size: 20))

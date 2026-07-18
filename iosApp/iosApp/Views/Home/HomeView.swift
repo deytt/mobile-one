@@ -7,6 +7,7 @@ import shared
  */
 struct HomeView: View {
     let onBrandSwitcherTap: () -> Void
+    var onPixTap: () -> Void = {}
     let onLogoutTap: () -> Void
     @StateObject private var viewModel = HomeViewModel()
     @Environment(\.whiteLabelConfig) private var config
@@ -21,6 +22,7 @@ struct HomeView: View {
             onToggleBalance: viewModel.onToggleBalance,
             onDismissError: viewModel.onDismissError,
             onBrandSwitcherTap: onBrandSwitcherTap,
+            onPixTap: onPixTap,
             onLogoutTap: onLogoutTap
         )
     }
@@ -35,6 +37,7 @@ struct HomeContent: View {
     let onToggleBalance: () -> Void
     let onDismissError: () -> Void
     let onBrandSwitcherTap: () -> Void
+    var onPixTap: () -> Void = {}
     let onLogoutTap: () -> Void
 
     var body: some View {
@@ -96,7 +99,7 @@ struct HomeContent: View {
 
             // Ações rápidas
             Section {
-                QuickActionsGrid(features: config.features)
+                QuickActionsGrid(features: config.features, onPixTap: onPixTap)
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets())
             }
