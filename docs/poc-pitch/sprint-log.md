@@ -63,8 +63,6 @@ cases, validadores, fake repositories, WhiteLabelConfig) fica para PRs seguintes
 - [x] `.github/workflows/ci.yml` com jobs `android` (ubuntu-latest) e `ios` (macos-latest)
 
 ### Planejado para PRs seguintes (por spec)
-- [ ] `WhiteLabelConfig` com as 3 marcas (tokens extraídos do Figma) — SPEC-004
-- [ ] JSON bundled das 3 marcas em `shared/commonMain/resources/white_label/` — SPEC-004
 - [ ] Entidades de domínio: `Account`, `Transaction`, `AuthToken`, `PixTransfer`
 - [ ] Interfaces de repositório: `AuthRepository`, `AccountRepository`, `PixRepository`
 - [ ] Fake repositories para todas as features
@@ -96,9 +94,62 @@ cases, validadores, fake repositories, WhiteLabelConfig) fica para PRs seguintes
 
 ---
 
+## Sprint 1 — parte 2/2 — Fundação WhiteLabelConfig (SPEC-004) ✅ CONCLUÍDO
+
+*Escopo: fundação de tema no `shared` (modelo, catálogo das 3 marcas, repositórios, use case,
+DI) e os contratos de presentation nativos que a consomem — `BankTheme` (Compose) e o
+Environment `whiteLabelConfig` (SwiftUI). A tela "Dev Mode — Brand Switcher" (Figma node
+`29:23293`) fica para o Sprint 2/3, quando as telas em geral forem implementadas via MCP do
+Figma.*
+
+### Entregue
+- [x] `com.mobileone.shared.config`: `WhiteLabelConfig`, `ThemeTokens`, `FeatureFlags`,
+  `SupportContact`, `OnboardingConfig` — contratos exatamente como descritos na SPEC-004
+- [x] `BrandCatalog` com as 3 marcas da POC (Banco Principal, Fintech Verde, Banco Premium),
+  usando os tokens de `.cursor/rules/02-architecture.mdc` como fonte de verdade
+- [x] `WhiteLabelConfigRepository` (+ `InMemoryWhiteLabelConfigRepository`) e
+  `AppStateRepository` (+ impl com `StateFlow`) — substituindo o `observeConfig(): Flow<...>`
+  da spec por um `StateFlow` mais idiomático no `AppStateRepository`
+- [x] `SwitchBrandUseCase` em `domain/usecase`
+- [x] `whiteLabelModule` registrado no `initKoin`
+- [x] 12 novos testes em `commonTest` (`BrandCatalogTest`, `WhiteLabelConfigRepositoryTest`,
+  `AppStateRepositoryTest`, `SwitchBrandUseCaseTest`), rodando em Android + iOS Simulator
+- [x] Android: `LocalWhiteLabelConfig`, `ThemeMapper` (`ThemeTokens` → `ColorScheme`/`Shapes`)
+  e `BankTheme`, aplicados no `MainActivity` via `AppStateRepository` (Koin)
+- [x] iOS: `Color(hex:)`, Environment `whiteLabelConfig` (default a partir do `BrandCatalog`) e
+  propriedades computadas de tema, aplicados no `ContentView`
+
+### Decisões e simplificações desta fundação
+- As 3 marcas são factories Kotlin em `BrandCatalog` (sem I/O de plataforma). O carregamento
+  real a partir de JSON bundled (`resources/white_label/*.json`, conforme a spec) fica para
+  quando a tela de Brand Switcher precisar de fato trocar a configuração em runtime a partir
+  de um arquivo — nesse momento a mudança será proposta como spec/ADR incremental.
+- iOS lê a configuração uma única vez via `EnvironmentKey.defaultValue`, sem observar
+  `AppStateRepository.currentConfig` (`StateFlow`) em tempo real. A ponte Flow → Combine/
+  AsyncSequence só é necessária quando o Brand Switcher permitir troca em runtime.
+- Divergência de token encontrada entre os documentos: `colorPrimary` do Banco Premium é
+  `#8B0000` na SPEC-004 (tabela descritiva do pitch) e `#782D00` em
+  `.cursor/rules/02-architecture.mdc` (tabela de referência para código). Usamos o valor da
+  regra de arquitetura, por ser explicitamente marcado como fonte de verdade extraída do
+  Figma.
+
+### Métricas atualizadas
+
+| Métrica | Valor |
+|---|---|
+| Linhas no shared (`.kt` + `.sq`) | 609 (23 arquivos) |
+| Linhas no androidApp (`.kt`) | 186 (6 arquivos) |
+| Linhas no iosApp (`.swift`) | 88 (4 arquivos) |
+| % compartilhado (shared / total de código) | ~69% (609 / 883) |
+| Testes no shared | 16 testes (4 smoke pré-existentes + 12 da fundação WhiteLabelConfig), rodando em Android + iOS Simulator |
+| Features implementadas | 1/4 (fundação de tema — SPEC-004 parcial, sem Brand Switcher UI) |
+
+---
+
 ## Sprint 2 — UI Android (Compose) — planejado
 
-- [ ] `BankTheme` consumindo `WhiteLabelConfig` (mapeamento token → MaterialTheme)
+- [x] `BankTheme` consumindo `WhiteLabelConfig` (mapeamento token → MaterialTheme) — entregue na
+  fundação (Sprint 1, parte 2/2)
 - [ ] Tela Splash (SPEC-001 / node `28:19512`)
 - [ ] Tela Login (SPEC-001 / node `29:20015`)
 - [ ] Tela Biometria (SPEC-001 / node `29:20689`)
@@ -111,7 +162,10 @@ cases, validadores, fake repositories, WhiteLabelConfig) fica para PRs seguintes
 
 ## Sprint 3 — UI iOS (SwiftUI) — planejado
 
-- [ ] `BankThemeEnvironment` consumindo `WhiteLabelConfig`
+- [x] Environment `whiteLabelConfig` consumindo `WhiteLabelConfig` — entregue na fundação
+  (Sprint 1, parte 2/2), com leitura estática do `BrandCatalog`; observação em tempo real do
+  `AppStateRepository` (ponte Flow → Combine/AsyncSequence) fica para quando o Brand Switcher
+  existir
 - [ ] Mesmas 6 telas em SwiftUI (mesmos nodes Figma)
 - [ ] Validar paridade visual Android ↔ iOS
 - [ ] Validar que troca de marca funciona igual nas duas plataformas
