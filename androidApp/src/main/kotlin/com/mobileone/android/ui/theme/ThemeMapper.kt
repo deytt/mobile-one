@@ -22,6 +22,7 @@ fun ThemeTokens.toColorScheme(): ColorScheme {
     val error = colorError.toComposeColor()
     val onPrimary = colorOnPrimary.toComposeColor()
     val onBackground = colorOnBackground.toComposeColor()
+    val onSurface = colorOnSurface.toComposeColor()
 
     return lightColorScheme(
         primary = primary,
@@ -33,7 +34,7 @@ fun ThemeTokens.toColorScheme(): ColorScheme {
         background = background,
         onBackground = onBackground,
         surface = surface,
-        onSurface = onBackground,
+        onSurface = onSurface,
         error = error,
         onError = onPrimary
     )
