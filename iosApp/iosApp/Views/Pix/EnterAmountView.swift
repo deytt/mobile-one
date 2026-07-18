@@ -90,6 +90,7 @@ struct EnterAmountContent: View {
         .navigationTitle("Valor")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(config.primaryColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 }
