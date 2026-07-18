@@ -16,6 +16,7 @@ import com.mobileone.android.ui.screen.auth.LoginScreen
 import com.mobileone.android.ui.screen.auth.SplashScreen
 import com.mobileone.android.ui.screen.brandSwitcher.BrandSwitcherScreen
 import com.mobileone.android.ui.screen.home.HomeScreen
+import com.mobileone.android.ui.screen.pix.PixFlowScreen
 import com.mobileone.android.viewmodel.AuthViewModel
 import com.mobileone.shared.feature.auth.AuthNavigation
 import org.koin.androidx.compose.koinViewModel
@@ -26,6 +27,7 @@ private object Routes {
     const val BIOMETRIC_WELCOME = "biometricWelcome"
     const val HOME = "home"
     const val BRAND_SWITCHER = "brandSwitcher"
+    const val PIX = "pix"
 }
 
 /**
@@ -85,6 +87,9 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
                 onBrandSwitcherClick = {
                     navController.navigate(Routes.BRAND_SWITCHER)
                 },
+                onPixClick = {
+                    navController.navigate(Routes.PIX)
+                },
                 onLogoutClick = {
                     authViewModel.onLogoutClick()
                     navController.navigate(Routes.LOGIN) {
@@ -97,12 +102,15 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
             BrandSwitcherScreen(
                 onBack = { navController.popBackStack() },
                 onApplied = {
-                    // Tema já foi atualizado via AppStateRepository (observado na MainActivity).
-                    // Volta para Home e recria o stack para refletir o novo tema.
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.HOME) { inclusive = true }
                     }
                 }
+            )
+        }
+        composable(Routes.PIX) {
+            PixFlowScreen(
+                onClose = { navController.popBackStack() }
             )
         }
     }

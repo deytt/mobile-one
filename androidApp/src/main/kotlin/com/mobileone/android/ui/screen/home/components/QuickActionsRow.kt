@@ -24,7 +24,7 @@ import com.mobileone.shared.config.BrandCatalog
 import com.mobileone.shared.config.FeatureFlags
 
 @Composable
-fun QuickActionsRow(features: FeatureFlags, modifier: Modifier = Modifier) {
+fun QuickActionsRow(features: FeatureFlags, onPixClick: () -> Unit = {}, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -33,32 +33,36 @@ fun QuickActionsRow(features: FeatureFlags, modifier: Modifier = Modifier) {
             QuickActionButton(
                 label = "PIX",
                 icon = { Icon(Icons.Default.Pix, contentDescription = "PIX", modifier = Modifier.size(22.dp)) },
+                onClick = onPixClick,
                 modifier = Modifier.weight(1f)
             )
         }
         QuickActionButton(
             label = "Transferir",
             icon = { Icon(Icons.AutoMirrored.Filled.CompareArrows, contentDescription = "Transferir", modifier = Modifier.size(22.dp)) },
+            onClick = {},
             modifier = Modifier.weight(1f)
         )
         if (features.creditCardEnabled) {
             QuickActionButton(
                 label = "Pagar",
                 icon = { Icon(Icons.Default.CreditCard, contentDescription = "Pagar", modifier = Modifier.size(22.dp)) },
+                onClick = {},
                 modifier = Modifier.weight(1f)
             )
         }
         QuickActionButton(
             label = "Recarga",
             icon = { Icon(Icons.Default.PhoneAndroid, contentDescription = "Recarga", modifier = Modifier.size(22.dp)) },
+            onClick = {},
             modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-private fun QuickActionButton(label: String, icon: @Composable () -> Unit, modifier: Modifier = Modifier) {
-    FilledTonalButton(onClick = {}, modifier = modifier) {
+private fun QuickActionButton(label: String, icon: @Composable () -> Unit, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    FilledTonalButton(onClick = onClick, modifier = modifier) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             icon()
             Text(text = label, style = MaterialTheme.typography.labelSmall)
