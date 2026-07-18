@@ -1,6 +1,6 @@
 # SPEC-010 — Home de Conta: Ajuste de Layout e Flavor
 
-**Status:** Pronto para implementação  
+**Status:** Implementado  
 **Tipo:** Layout / Brand  
 **Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-656) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-991) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-1332)
 
@@ -294,14 +294,14 @@ struct HomeContaView: View {
 
 ## Checklist de Ajuste
 
-- [ ] Status bar `colorPrimary`, header `colorPrimary` contínuos (sem separação)  
-- [ ] "Saldo disponível" 13sp branco opacity 70%  
-- [ ] Valor 28sp bold branco, ícone olho 20dp  
-- [ ] 3 quick actions circulares 48dp, fundo `rgba(255,255,255,0.15)`  
-- [ ] Labels das actions 12sp medium branco  
-- [ ] Feature cards com shadow, border-radius da marca, ícone `colorPrimary`  
-- [ ] Transação entrada com valor verde `#22C55E` e sinal "+"  
-- [ ] "Ver todas" 13sp `colorPrimary`  
+- [x] Status bar `colorPrimary`, header `colorPrimary` contínuos (sem separação)  
+- [x] "Saldo disponível" 13sp branco opacity 70%  
+- [x] Valor 28sp bold branco, ícone olho 20dp  
+- [x] 3 quick actions circulares 48dp, fundo `rgba(255,255,255,0.15)`  
+- [x] Labels das actions 12sp medium branco  
+- [x] Feature cards com shadow, border-radius da marca, ícone `colorPrimary`  
+- [x] Transação entrada com valor verde `#22C55E` e sinal "+"  
+- [x] "Ver todas" 13sp `colorPrimary`  
 - [ ] **NOVO** Bottom Bar com "Conta" ativa (pill preenchida `colorPrimary`)  
 - [ ] "Cartões" inativo navega para HomeCartoesScreen  
 - [ ] Botão grade abre BrandSwitcher  

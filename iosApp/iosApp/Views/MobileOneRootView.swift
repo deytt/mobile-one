@@ -10,10 +10,10 @@ private enum AppRoute: Hashable {
     case pix
 }
 
-/// Raiz de navegação do app (SPEC-001 + SPEC-002 + SPEC-009):
+/// Raiz de navegação do app (SPEC-001 + SPEC-002 + SPEC-009 + SPEC-010):
 /// - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
 /// - Autenticação converge para Home de Cartões (SPEC-009)
-/// - Bottom Tab Bar alterna Cartões ↔ Conta; botão grade abre BrandSwitcher
+/// - Bottom Tab Bar alterna Cartões ↔ Conta (SPEC-010); botão grade abre BrandSwitcher
 struct MobileOneRootView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @EnvironmentObject private var configObserver: AppConfigObserver
@@ -76,7 +76,7 @@ struct MobileOneRootView: View {
             )
             .navigationBarBackButtonHidden(true)
         case .homeConta:
-            HomeView(
+            HomeContaView(
                 onNavigateToCartoes: {
                     path = NavigationPath([AppRoute.homeCartoes])
                 },

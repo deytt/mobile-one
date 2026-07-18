@@ -16,7 +16,7 @@ import com.mobileone.android.ui.screen.auth.LoginScreen
 import com.mobileone.android.ui.screen.auth.SplashScreen
 import com.mobileone.android.ui.screen.brandSwitcher.BrandSwitcherScreen
 import com.mobileone.android.ui.screen.home.HomeCartoesScreen
-import com.mobileone.android.ui.screen.home.HomeScreen
+import com.mobileone.android.ui.screen.home.HomeContaScreen
 import com.mobileone.android.ui.screen.pix.PixFlowScreen
 import com.mobileone.android.viewmodel.AuthViewModel
 import com.mobileone.shared.feature.auth.AuthNavigation
@@ -33,10 +33,10 @@ private object Routes {
 }
 
 /**
- * Rotas do app (SPEC-001 + SPEC-002 + SPEC-009):
+ * Rotas do app (SPEC-001 + SPEC-002 + SPEC-009 + SPEC-010):
  * - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
  * - Autenticação converge para Home de Cartões (SPEC-009)
- * - Bottom Tab Bar alterna Cartões ↔ Conta; botão grade abre BrandSwitcher
+ * - Bottom Tab Bar alterna Cartões ↔ Conta (SPEC-010); botão grade abre BrandSwitcher
  */
 @Composable
 fun MobileOneNavHost(navController: NavHostController = rememberNavController()) {
@@ -98,7 +98,7 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
             )
         }
         composable(Routes.HOME_CONTA) {
-            HomeScreen(
+            HomeContaScreen(
                 onNavigateToCartoes = {
                     navController.navigate(Routes.HOME_CARTOES) {
                         popUpTo(Routes.HOME_CONTA) { inclusive = true }
