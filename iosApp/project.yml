@@ -28,6 +28,7 @@ targets:
         UILaunchScreen: {}
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+        NSFaceIDUsageDescription: "Use o Face ID para entrar na sua conta com segurança."
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mobileone.ios
