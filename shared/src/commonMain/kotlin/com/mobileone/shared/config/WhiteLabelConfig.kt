@@ -29,6 +29,12 @@ data class ThemeTokens(
     val colorError: String,
     val colorOnPrimary: String,
     val colorOnBackground: String,
+    /**
+     * Texto secundário/muted sobre [colorSurface] (ex: subtítulos, hints) — token
+     * `color/on-surface` documentado em `.cursor/rules/02-architecture.mdc`, adicionado na
+     * SPEC-001 pois o Figma de Login/Biometria já o usa e ele não existia até então.
+     */
+    val colorOnSurface: String,
     val fontFamilyName: String,
     val borderRadiusDp: Int,
     val elevationEnabled: Boolean
