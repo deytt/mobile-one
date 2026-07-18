@@ -6,12 +6,49 @@ POC técnica para demonstrar que **Kotlin Multiplatform (KMP) com UI nativa** é
 
 ---
 
+## Telas do app (white-label)
+
+As mesmas telas, nas **3 marcas** da POC — Banco Principal (`#003B6F`), Fintech Verde (`#00A86B`) e Banco Premium (`#782D00`). Designs de referência no [Figma Mobile-One](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One).
+
+| Marca | Primary | Tipografia | Radius |
+|---|---|---|---|
+| Banco Principal | `#003B6F` | Roboto | 12dp |
+| Fintech Verde | `#00A86B` | Inter | 16dp |
+| Banco Premium | `#782D00` | Georgia | 4dp |
+
+### Splash
+
+![Splash — 3 marcas](docs/assets/screenshots/splash-brands.png)
+
+### Login
+
+![Login — 3 marcas](docs/assets/screenshots/login-brands.png)
+
+### Biometria
+
+![Biometria — 3 marcas](docs/assets/screenshots/biometria-brands.png)
+
+### Home / Conta
+
+![Home Conta — 3 marcas](docs/assets/screenshots/home-conta-brands.png)
+
+### Home / Cartões
+
+![Home Cartões — 3 marcas](docs/assets/screenshots/home-cartoes-brands.png)
+
+### Brand Switcher
+
+![Brand Switcher — 3 marcas](docs/assets/screenshots/brand-switcher-brands.png)
+
+---
+
 ## Estrutura do projeto
 
 ```
 mobile-one/
 ├── .cursor/rules/          # Contexto do projeto para agentes de IA (Memory Bank)
 ├── docs/
+│   ├── assets/screenshots/ # Previews das telas (3 marcas) para o README
 │   ├── adr/                # Architecture Decision Records — decisões e argumentos
 │   ├── specs/              # Especificações de features e contratos de interface
 │   └── poc-pitch/          # Material de apresentação para gestores
