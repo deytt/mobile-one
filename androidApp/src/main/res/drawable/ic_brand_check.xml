@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Exportado do Figma (node 34:3785) — SPEC-011 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16"
+    android:tint="#FFFFFFFF">
+    <path
+        android:pathData="M8,14.6667C11.6819,14.6667 14.6667,11.6819 14.6667,8C14.6667,4.3181 11.6819,1.33333 8,1.33333C4.3181,1.33333 1.33333,4.3181 1.33333,8C1.33333,11.6819 4.3181,14.6667 8,14.6667Z"
+        android:strokeWidth="1.33333"
+        android:strokeColor="#FFFFFFFF"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M6,8L7.33333,9.33333L10,6.66667"
+        android:strokeWidth="1.33333"
+        android:strokeColor="#FFFFFFFF"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

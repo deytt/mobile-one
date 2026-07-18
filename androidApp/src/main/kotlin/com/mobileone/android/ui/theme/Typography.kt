@@ -54,7 +54,7 @@ private val georgiaFontFamily: FontFamily = FontFamily(
 )
 
 fun ThemeTokens.toTypography(): Typography {
-    val fontFamily = resolveFontFamily(fontFamilyName)
+    val fontFamily = fontFamilyFor(fontFamilyName)
     val base = Typography()
     return Typography(
         displayLarge = base.displayLarge.withFont(fontFamily),
@@ -77,7 +77,8 @@ fun ThemeTokens.toTypography(): Typography {
 
 private fun TextStyle.withFont(fontFamily: FontFamily): TextStyle = copy(fontFamily = fontFamily)
 
-private fun resolveFontFamily(fontFamilyName: String): FontFamily = when (fontFamilyName) {
+/** Resolve a família tipográfica pelo nome do token (`Roboto` / `Inter` / `Georgia`). */
+fun fontFamilyFor(fontFamilyName: String): FontFamily = when (fontFamilyName) {
     "Roboto" -> FontFamily.Default
     "Inter" -> interFontFamily
     "Georgia" -> georgiaFontFamily

@@ -1,8 +1,8 @@
 import SwiftUI
 import shared
 
-/// Login por CPF + senha (SPEC-001, node `29:20015`). Segue a separação View/Content de
-/// `.cursor/rules/06-ios-conventions.mdc`.
+/// Login por CPF + senha (SPEC-007 layout / SPEC-001 comportamento).
+/// Separação View/Content conforme `.cursor/rules/06-ios-conventions.mdc`.
 struct LoginView: View {
     @ObservedObject var viewModel: AuthViewModel
     var onRegisterTap: () -> Void = {}
@@ -19,7 +19,9 @@ struct LoginView: View {
 }
 
 struct LoginContent: View {
-    @Environment(\.whiteLabelConfig) private var theme
+    @Environment(\.whiteLabelConfig) private var config
+    @Environment(\.brandTheme) private var brandTheme
+
     let uiState: AuthUiState
     let onLoginTap: (String, String) -> Void
     let onBiometricTap: () -> Void
@@ -30,141 +32,144 @@ struct LoginContent: View {
     @State private var password = ""
     @State private var passwordVisible = false
 
-    private var canSubmit: Bool { !cpf.isEmpty && !password.isEmpty && !uiState.isLoading && !uiState.isAccountLocked }
+    private var canSubmit: Bool {
+        !cpf.isEmpty && !password.isEmpty && !uiState.isLoading && !uiState.isAccountLocked
+    }
+
+    private var isPremium: Bool { config.brandId == "banco_premium" }
+    private var dividerColor: Color { Color(hex: "#6B7280").opacity(0.25) }
 
     var body: some View {
         VStack(spacing: 0) {
-            LoginTopBar(theme: theme)
+            LoginHeader(config: config, brandTheme: brandTheme)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Bem-vindo de volta")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(theme.onBackgroundColor)
+                        .font(titleFont)
+                        .tracking(-0.48)
+                        .foregroundStyle(brandTheme.onBackground)
+                        .padding(.top, 32)
 
                     Text("Entre com seu CPF e senha")
-                        .font(.system(size: 13))
-                        .foregroundStyle(theme.onSurfaceColor)
+                        .font(brandTheme.font(size: 13))
+                        .foregroundStyle(brandTheme.onSurface)
                         .padding(.top, 4)
                         .padding(.bottom, 24)
 
-                    FieldLabel(text: "CPF", theme: theme)
-                    HStack {
-                        TextField("000.000.000-00", text: $cpf)
-                            .keyboardType(.numberPad)
-                            .onChange(of: cpf) { _, newValue in cpf = Self.maskCpf(newValue) }
-                        Image(systemName: "square.grid.3x3.fill")
-                            .foregroundStyle(theme.onSurfaceColor)
-                    }
-                    .padding(.horizontal, 15)
-                    .frame(height: 48)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(theme.onSurfaceColor.opacity(0.3), lineWidth: 1)
+                    FieldLabel(text: "CPF", brandTheme: brandTheme)
+                    BrandTextField(
+                        text: $cpf,
+                        placeholder: "000.000.000-00",
+                        brandTheme: brandTheme,
+                        keyboardType: .numberPad,
+                        trailingSystemImage: "square.grid.3x3.fill"
                     )
-                    .padding(.bottom, 20)
-
-                    FieldLabel(text: "Senha", theme: theme)
-                    HStack {
-                        Group {
-                            if passwordVisible {
-                                TextField("••••••", text: $password)
-                            } else {
-                                SecureField("••••••", text: $password)
-                            }
-                        }
-                        Button(action: { passwordVisible.toggle() }) {
-                            Image(systemName: passwordVisible ? "eye.slash" : "eye")
-                                .foregroundStyle(theme.onSurfaceColor)
-                        }
+                    .onChange(of: cpf) { _, newValue in
+                        cpf = Self.maskCpf(newValue)
                     }
-                    .padding(.horizontal, 15)
-                    .frame(height: 48)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(theme.onSurfaceColor.opacity(0.3), lineWidth: 1)
+                    .padding(.bottom, 16)
+
+                    FieldLabel(text: "Senha", brandTheme: brandTheme)
+                    BrandSecureField(
+                        text: $password,
+                        passwordVisible: $passwordVisible,
+                        brandTheme: brandTheme
                     )
 
                     HStack {
                         Spacer()
                         Button("Esqueci minha senha") {}
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(theme.primaryColor)
+                            .font(brandTheme.font(size: 12, weight: .medium))
+                            .foregroundStyle(brandTheme.primary)
                     }
-                    .padding(.top, 8)
-                    .padding(.bottom, 24)
+                    .padding(.bottom, 32)
 
                     if let errorMessage = uiState.errorMessage {
                         Text(errorMessage)
-                            .font(.system(size: 13))
-                            .foregroundStyle(theme.errorColor)
-                            .padding(.bottom, 16)
+                            .font(brandTheme.font(size: 13))
+                            .foregroundStyle(brandTheme.error)
+                            .padding(.bottom, 12)
                     }
 
                     Button(action: {
                         onDismissError()
                         onLoginTap(cpf, password)
                     }) {
-                        if uiState.isLoading {
-                            ProgressView().tint(theme.onPrimaryColor)
-                        } else {
-                            Text("Entrar")
-                                .font(.system(size: 15, weight: .bold))
+                        Group {
+                            if uiState.isLoading {
+                                ProgressView().tint(brandTheme.onPrimary)
+                            } else {
+                                Text("Entrar")
+                                    .font(brandTheme.font(size: 15, weight: .bold))
+                            }
                         }
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 52)
                     }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .foregroundStyle(theme.onPrimaryColor)
-                    .background(theme.primaryColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .background(canSubmit ? brandTheme.primary : Color(hex: "#6B7280").opacity(0.3))
+                    .clipShape(RoundedRectangle(cornerRadius: brandTheme.cornerRadius))
                     .disabled(!canSubmit)
-                    .opacity(canSubmit ? 1 : 0.3)
-                    .padding(.bottom, 16)
+                    .padding(.bottom, 12)
 
                     if uiState.isBiometricAvailable && uiState.isBiometricEnabled {
                         Button(action: onBiometricTap) {
                             HStack(spacing: 8) {
                                 Image(systemName: "touchid")
-                                Text("Entrar com biometria").font(.system(size: 15, weight: .semibold))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 18, height: 18)
+                                Text("Entrar com biometria")
+                                    .font(brandTheme.font(size: 15, weight: .semibold))
                             }
+                            .foregroundStyle(brandTheme.primary)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: brandTheme.cornerRadius)
+                                    .stroke(brandTheme.primary, lineWidth: 1)
+                            )
                         }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
-                        .foregroundStyle(theme.primaryColor)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(theme.primaryColor, lineWidth: 1)
-                        )
                         .disabled(uiState.isLoading)
                         .padding(.bottom, 24)
                     }
 
                     HStack(spacing: 12) {
-                        Rectangle().fill(theme.onSurfaceColor.opacity(0.25)).frame(height: 1)
-                        Text("ou").font(.system(size: 12)).foregroundStyle(theme.onSurfaceColor)
-                        Rectangle().fill(theme.onSurfaceColor.opacity(0.25)).frame(height: 1)
+                        Rectangle().fill(dividerColor).frame(height: 1)
+                        Text("ou")
+                            .font(brandTheme.font(size: 12))
+                            .foregroundStyle(brandTheme.onSurface.opacity(0.6))
+                        Rectangle().fill(dividerColor).frame(height: 1)
                     }
                     .padding(.bottom, 20)
 
-                    HStack {
-                        Spacer()
+                    HStack(spacing: 0) {
+                        Spacer(minLength: 0)
                         Text("Ainda não tem conta? ")
-                            .font(.system(size: 13))
-                            .foregroundStyle(theme.onSurfaceColor)
+                            .font(brandTheme.font(size: 13))
+                            .foregroundStyle(brandTheme.onSurface)
                         Text("Abra a sua grátis")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundStyle(theme.primaryColor)
+                            .font(brandTheme.font(size: 13, weight: .semibold))
+                            .foregroundStyle(brandTheme.primary)
                             .onTapGesture(perform: onRegisterTap)
-                        Spacer()
+                        Spacer(minLength: 0)
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 32)
                 .padding(.bottom, 24)
             }
+            .background(brandTheme.background)
         }
-        .background(theme.backgroundColor)
-        .ignoresSafeArea(edges: .bottom)
+        .background(brandTheme.background)
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var titleFont: Font {
+        if isPremium {
+            return brandTheme.font(size: 24, weight: .bold, italic: true)
+        }
+        return brandTheme.font(size: 24, weight: .bold)
     }
 
     private static func maskCpf(_ raw: String) -> String {
@@ -179,48 +184,140 @@ struct LoginContent: View {
     }
 }
 
-private struct LoginTopBar: View {
-    let theme: WhiteLabelConfig
+private struct LoginHeader: View {
+    let config: WhiteLabelConfig
+    let brandTheme: BrandTheme
+
+    private var isPremium: Bool { config.brandId == "banco_premium" }
+    private var isFintech: Bool { config.brandId == "fintech_verde" }
 
     var body: some View {
         HStack(spacing: 6) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.white.opacity(0.18))
-                    .frame(width: 28, height: 28)
-                Text(brandInitials(theme.brandName))
-                    .font(.system(size: 11, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-            Text(theme.brandName)
-                .font(.system(size: 13, weight: .bold))
+            BrandLogoView(size: 28, config: config)
+            Text(config.brandName)
+                .font(nameFont)
+                .tracking(isPremium ? 0.16 : -0.26)
                 .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
         .frame(height: 64)
-        .background(theme.primaryColor)
+        .background(brandTheme.primary.ignoresSafeArea(edges: .top))
+    }
+
+    private var nameFont: Font {
+        if isPremium {
+            return brandTheme.font(size: 13, weight: .bold, italic: true)
+        }
+        if isFintech {
+            return brandTheme.font(size: 13, weight: .semibold)
+        }
+        return brandTheme.font(size: 13, weight: .bold)
     }
 }
 
 private struct FieldLabel: View {
     let text: String
-    let theme: WhiteLabelConfig
+    let brandTheme: BrandTheme
 
     var body: some View {
         Text(text)
-            .font(.system(size: 12, weight: .semibold))
-            .foregroundStyle(theme.onBackgroundColor)
+            .font(brandTheme.font(size: 12, weight: .semibold))
+            .foregroundStyle(brandTheme.onBackground)
             .padding(.bottom, 4)
     }
 }
 
-#Preview {
+private struct BrandTextField: View {
+    @Binding var text: String
+    let placeholder: String
+    let brandTheme: BrandTheme
+    var keyboardType: UIKeyboardType = .default
+    var trailingSystemImage: String
+
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            TextField(placeholder, text: $text)
+                .font(brandTheme.font(size: 14))
+                .foregroundStyle(brandTheme.onBackground)
+                .keyboardType(keyboardType)
+                .padding(.leading, 15)
+                .padding(.trailing, 45)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            Image(systemName: trailingSystemImage)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 16, height: 16)
+                .foregroundStyle(brandTheme.onSurface)
+                .padding(.trailing, 15)
+        }
+        .frame(height: 48)
+        .background(brandTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: brandTheme.cornerRadius)
+                .stroke(brandTheme.onSurface.opacity(0.3), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: brandTheme.cornerRadius))
+    }
+}
+
+private struct BrandSecureField: View {
+    @Binding var text: String
+    @Binding var passwordVisible: Bool
+    let brandTheme: BrandTheme
+
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            Group {
+                if passwordVisible {
+                    TextField("••••••", text: $text)
+                } else {
+                    SecureField("••••••", text: $text)
+                }
+            }
+            .font(brandTheme.font(size: 14))
+            .foregroundStyle(brandTheme.onBackground)
+            .padding(.leading, 15)
+            .padding(.trailing, 45)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Button(action: { passwordVisible.toggle() }) {
+                Image(systemName: passwordVisible ? "eye.slash" : "eye")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 16, height: 16)
+                    .foregroundStyle(brandTheme.onSurface)
+            }
+            .padding(.trailing, 15)
+        }
+        .frame(height: 48)
+        .background(brandTheme.surface)
+        .overlay(
+            RoundedRectangle(cornerRadius: brandTheme.cornerRadius)
+                .stroke(brandTheme.onSurface.opacity(0.3), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: brandTheme.cornerRadius))
+    }
+}
+
+#Preview("Banco Principal") {
     LoginContent(
         uiState: AuthUiState(isBiometricAvailable: true, isBiometricEnabled: true),
         onLoginTap: { _, _ in },
         onBiometricTap: {}
     )
     .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPrincipal())
+    .environment(\.brandTheme, BrandTheme(config: BrandCatalog.shared.bancoPrincipal()))
+}
+
+#Preview("Fintech Verde") {
+    LoginContent(
+        uiState: AuthUiState(isBiometricAvailable: true, isBiometricEnabled: true),
+        onLoginTap: { _, _ in },
+        onBiometricTap: {}
+    )
+    .environment(\.whiteLabelConfig, BrandCatalog.shared.fintechVerde())
+    .environment(\.brandTheme, BrandTheme(config: BrandCatalog.shared.fintechVerde()))
 }
 
 #Preview("Erro de credenciais") {
@@ -229,5 +326,6 @@ private struct FieldLabel: View {
         onLoginTap: { _, _ in },
         onBiometricTap: {}
     )
-    .environment(\.whiteLabelConfig, BrandCatalog.shared.fintechVerde())
+    .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPremium())
+    .environment(\.brandTheme, BrandTheme(config: BrandCatalog.shared.bancoPremium()))
 }
