@@ -36,6 +36,7 @@ struct HomeContaContent: View {
     var onLogoutTap: () -> Void = {}
 
     @Environment(\.brandTheme) private var brandTheme
+    @State private var topSafeArea: CGFloat = 0
 
     private let creditGreen = Color(hex: "#22C55E")
     private var cornerRadius: CGFloat { brandTheme.cornerRadius }
@@ -60,6 +61,7 @@ struct HomeContaContent: View {
             )
         }
         .background(brandTheme.background)
+        .readTopSafeArea($topSafeArea)
         .toolbar(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .alert(
@@ -116,6 +118,8 @@ struct HomeContaContent: View {
                 .padding(.vertical, 16)
             }
         }
+        // Conteúdo sobe sob a status bar; o hero (com padding do inset) rola junto.
+        .ignoresSafeArea(edges: .top)
         .refreshable { onRefresh() }
         .background(brandTheme.background)
     }
@@ -125,15 +129,10 @@ struct HomeContaContent: View {
             HomeGreetingHeader(userName: uiState.account?.holderName ?? "Heitor Bastos")
             heroBalance
         }
-        .background(brandTheme.primary.ignoresSafeArea(edges: .top))
-        .clipShape(
-            UnevenRoundedRectangle(
-                topLeadingRadius: 0,
-                bottomLeadingRadius: cornerRadius,
-                bottomTrailingRadius: cornerRadius,
-                topTrailingRadius: 0,
-                style: .continuous
-            )
+        .homeScrollingBrandHeader(
+            color: brandTheme.primary,
+            topSafeArea: topSafeArea,
+            bottomCornerRadius: cornerRadius
         )
     }
 

@@ -24,6 +24,7 @@ struct HomeCartoesContent: View {
     let onBrandSwitcherTap: () -> Void
 
     @Environment(\.brandTheme) private var brandTheme
+    @State private var topSafeArea: CGFloat = 0
 
     private var cornerRadius: CGFloat { brandTheme.cornerRadius }
 
@@ -38,6 +39,8 @@ struct HomeCartoesContent: View {
                     Spacer().frame(height: 16)
                 }
             }
+            // Conteúdo sobe sob a status bar; o header (com padding do inset) rola junto.
+            .ignoresSafeArea(edges: .top)
             .background(brandTheme.background)
 
             HomeTabBar(
@@ -47,6 +50,7 @@ struct HomeCartoesContent: View {
             )
         }
         .background(brandTheme.background)
+        .readTopSafeArea($topSafeArea)
         .toolbar(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
@@ -58,7 +62,10 @@ struct HomeCartoesContent: View {
                 .padding(.horizontal, 16)
             Spacer().frame(height: 20)
         }
-        .background(brandTheme.primary.ignoresSafeArea(edges: .top))
+        .homeScrollingBrandHeader(
+            color: brandTheme.primary,
+            topSafeArea: topSafeArea
+        )
     }
 
     private var invoiceCard: some View {

@@ -108,6 +108,7 @@ struct EnterKeyContent: View {
             }
         }
         .toolbarBackground(config.primaryColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
     }
 

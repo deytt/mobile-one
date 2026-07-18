@@ -61,6 +61,7 @@ import com.mobileone.android.ui.theme.LocalWhiteLabelConfig
 import com.mobileone.android.viewmodel.AuthViewModel
 import com.mobileone.shared.config.BrandCatalog
 import com.mobileone.shared.config.WhiteLabelConfig
+import com.mobileone.shared.data.repository.FakeAuthRepository
 import com.mobileone.shared.feature.auth.AuthError
 import com.mobileone.shared.feature.auth.AuthUiState
 import org.koin.androidx.compose.koinViewModel
@@ -94,8 +95,9 @@ fun LoginContent(
     onRegisterClick: () -> Unit = {},
     onDismissError: () -> Unit = {}
 ) {
-    var cpf by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    // Pré-preenchido com credenciais de demo (POC) para agilizar o desenvolvimento.
+    var cpf by remember { mutableStateOf(maskCpf(FakeAuthRepository.DEMO_CPF)) }
+    var password by remember { mutableStateOf(FakeAuthRepository.DEMO_PASSWORD) }
     var passwordVisible by remember { mutableStateOf(false) }
 
     val radius = config.theme.borderRadiusDp.dp

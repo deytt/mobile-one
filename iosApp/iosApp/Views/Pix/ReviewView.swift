@@ -73,6 +73,7 @@ struct ReviewContent: View {
             .navigationTitle("Revisão")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(config.primaryColor, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbarColorScheme(.dark, for: .navigationBar)
         )
     }
