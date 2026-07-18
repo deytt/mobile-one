@@ -11,10 +11,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mobileone.android.ui.screen.HomePlaceholderScreen
 import com.mobileone.android.ui.screen.auth.BiometricWelcomeScreen
 import com.mobileone.android.ui.screen.auth.LoginScreen
 import com.mobileone.android.ui.screen.auth.SplashScreen
+import com.mobileone.android.ui.screen.brandSwitcher.BrandSwitcherScreen
+import com.mobileone.android.ui.screen.home.HomeScreen
 import com.mobileone.android.viewmodel.AuthViewModel
 import com.mobileone.shared.feature.auth.AuthNavigation
 import org.koin.androidx.compose.koinViewModel
@@ -24,11 +25,14 @@ private object Routes {
     const val LOGIN = "login"
     const val BIOMETRIC_WELCOME = "biometricWelcome"
     const val HOME = "home"
+    const val BRAND_SWITCHER = "brandSwitcher"
 }
 
 /**
- * Rotas do fluxo de autenticação (SPEC-001): Splash decide entre Login e Boas-vindas com
- * biometria; ambos convergem para Home ao autenticar.
+ * Rotas do app (SPEC-001 + SPEC-002):
+ * - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
+ * - Autenticação converge para Home real (SPEC-002)
+ * - Home expõe ícone ⚙ que navega para BrandSwitcher (SPEC-004)
  */
 @Composable
 fun MobileOneNavHost(navController: NavHostController = rememberNavController()) {
@@ -77,11 +81,26 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
             )
         }
         composable(Routes.HOME) {
-            HomePlaceholderScreen(
+            HomeScreen(
+                onBrandSwitcherClick = {
+                    navController.navigate(Routes.BRAND_SWITCHER)
+                },
                 onLogoutClick = {
                     authViewModel.onLogoutClick()
                     navController.navigate(Routes.LOGIN) {
                         popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
+        composable(Routes.BRAND_SWITCHER) {
+            BrandSwitcherScreen(
+                onBack = { navController.popBackStack() },
+                onApplied = {
+                    // Tema já foi atualizado via AppStateRepository (observado na MainActivity).
+                    // Volta para Home e recria o stack para refletir o novo tema.
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.HOME) { inclusive = true }
                     }
                 }
             )

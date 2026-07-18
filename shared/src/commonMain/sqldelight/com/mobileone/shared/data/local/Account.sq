@@ -1,0 +1,18 @@
+-- Tabela de conta corrente (SPEC-002 / ADR-002).
+-- Valores monetários em centavos (Long) para evitar aritmética de ponto flutuante.
+CREATE TABLE Account (
+    id TEXT NOT NULL PRIMARY KEY,
+    holderId TEXT NOT NULL,
+    holderName TEXT NOT NULL,
+    maskedNumber TEXT NOT NULL,
+    balanceCents INTEGER NOT NULL,
+    availableLimitCents INTEGER NOT NULL,
+    updatedAt INTEGER NOT NULL
+);
+
+upsertAccount:
+INSERT OR REPLACE INTO Account (id, holderId, holderName, maskedNumber, balanceCents, availableLimitCents, updatedAt)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+selectAccount:
+SELECT * FROM Account WHERE id = :accountId;

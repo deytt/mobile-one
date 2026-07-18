@@ -1,6 +1,8 @@
 package com.mobileone.android.di
 
 import com.mobileone.android.viewmodel.AuthViewModel
+import com.mobileone.android.viewmodel.BrandSwitcherViewModel
+import com.mobileone.android.viewmodel.HomeViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -10,4 +12,6 @@ import org.koin.dsl.module
  */
 val androidAppModule = module {
     viewModelOf(::AuthViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::BrandSwitcherViewModel)
 }

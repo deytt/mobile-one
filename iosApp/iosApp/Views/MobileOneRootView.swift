@@ -1,18 +1,20 @@
 import SwiftUI
 import shared
 
-private enum AuthRoute: Hashable {
+private enum AppRoute: Hashable {
     case login
     case biometricWelcome
     case home
+    case brandSwitcher
 }
 
-/// Raiz de navegação do fluxo de autenticação (SPEC-001): Splash decide entre Login e
-/// Boas-vindas com biometria; ambos convergem para Home ao autenticar. Usa `NavigationStack`
-/// com um único item de caminho por vez (sem histórico de "voltar"), já que cada tela é uma
-/// transição de estado completa — não uma hierarquia de navegação — seguindo o mermaid do plano.
+/// Raiz de navegação do app (SPEC-001 + SPEC-002):
+/// - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
+/// - Autenticação converge para Home real com saldo/extrato (SPEC-002)
+/// - Home expõe ícone ⚙ que navega para BrandSwitcher (SPEC-004)
 struct MobileOneRootView: View {
     @StateObject private var authViewModel = AuthViewModel()
+    @EnvironmentObject private var configObserver: AppConfigObserver
     @State private var path = NavigationPath()
     @State private var isSplashVisible = true
 
@@ -25,15 +27,13 @@ struct MobileOneRootView: View {
                     Color.clear
                 }
             }
-            .navigationDestination(for: AuthRoute.self) { route in
+            .navigationDestination(for: AppRoute.self) { route in
                 destination(for: route)
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar(.hidden, for: .navigationBar)
             }
         }
         .onChange(of: authViewModel.uiState.navigateToHome) { _, navigate in
             guard navigate else { return }
-            path = NavigationPath([AuthRoute.home])
+            path = NavigationPath([AppRoute.home])
             authViewModel.onConsumeNavigation()
         }
         .alert(
@@ -51,25 +51,44 @@ struct MobileOneRootView: View {
     }
 
     @ViewBuilder
-    private func destination(for route: AuthRoute) -> some View {
+    private func destination(for route: AppRoute) -> some View {
         switch route {
         case .login:
             LoginView(viewModel: authViewModel)
+                .navigationBarBackButtonHidden(true)
+                .toolbar(.hidden, for: .navigationBar)
         case .biometricWelcome:
             BiometricWelcomeView(viewModel: authViewModel, onUsePasswordTap: {
-                path = NavigationPath([AuthRoute.login])
+                path = NavigationPath([AppRoute.login])
             })
+            .navigationBarBackButtonHidden(true)
+            .toolbar(.hidden, for: .navigationBar)
         case .home:
-            HomePlaceholderView(onLogoutTap: {
-                authViewModel.onLogoutTap()
-                path = NavigationPath([AuthRoute.login])
-            })
+            HomeView(
+                onBrandSwitcherTap: {
+                    path.append(AppRoute.brandSwitcher)
+                },
+                onLogoutTap: {
+                    authViewModel.onLogoutTap()
+                    path = NavigationPath([AppRoute.login])
+                }
+            )
+            .navigationBarBackButtonHidden(true)
+        case .brandSwitcher:
+            BrandSwitcherView(
+                onBack: { path.removeLast() },
+                onApplied: { _ in
+                    // Tema já foi aplicado via AppConfigObserver (observado em iosAppApp).
+                    // Volta para Home — o Environment já reflete o novo config.
+                    path.removeLast()
+                }
+            )
         }
     }
 
     private func handleSplashFinished() {
         isSplashVisible = false
-        let initialRoute: AuthRoute = authViewModel.uiState.isBiometricEnabled ? .biometricWelcome : .login
+        let initialRoute: AppRoute = authViewModel.uiState.isBiometricEnabled ? .biometricWelcome : .login
         path = NavigationPath([initialRoute])
     }
 }
@@ -77,4 +96,5 @@ struct MobileOneRootView: View {
 #Preview {
     MobileOneRootView()
         .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPrincipal())
+        .environmentObject(AppConfigObserver())
 }
