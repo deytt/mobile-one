@@ -46,8 +46,8 @@ class FakeAuthRepository : AuthRepository {
 
     companion object {
         /** CPF válido de demonstração (checksum correto, não pertence a pessoa real). */
-        const val DEMO_CPF = "52998224725"
-        const val DEMO_PASSWORD = "senha123"
+        const val DEMO_CPF = "76109277673"
+        const val DEMO_PASSWORD = "111111"
         const val DEMO_USER_NAME = "Heitor Bastos"
 
         /** CPF válido de demonstração reservado para simular `AuthDomainError.NetworkError`. */

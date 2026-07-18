@@ -1,9 +1,0 @@
--- Tabela placeholder (smoke test) para validar a geração de código SQLDelight e o driver
--- nas duas plataformas antes de qualquer schema de negócio real (ver ADR-002).
--- Substituída pelas tabelas reais (Account, Transaction, ...) na PR da SPEC-002.
-CREATE TABLE SchemaInfo (
-    version INTEGER NOT NULL
-);
-
-selectVersion:
-SELECT * FROM SchemaInfo;

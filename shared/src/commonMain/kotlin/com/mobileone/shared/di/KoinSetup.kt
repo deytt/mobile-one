@@ -58,5 +58,5 @@ expect fun securityPlatformModule(): Module
 fun initKoin(appDeclaration: KoinAppDeclaration = {}): KoinApplication =
     startKoin {
         appDeclaration()
-        modules(sharedModule, whiteLabelModule, authModule, securityPlatformModule())
+        modules(sharedModule, whiteLabelModule, authModule, homeModule, securityPlatformModule())
     }
