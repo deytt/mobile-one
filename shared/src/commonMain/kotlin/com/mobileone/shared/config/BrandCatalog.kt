@@ -29,6 +29,7 @@ object BrandCatalog {
             colorError = "#DC2626",
             colorOnPrimary = "#FFFFFF",
             colorOnBackground = "#1A1A2E",
+            colorOnSurface = "#6B7280",
             fontFamilyName = "Roboto",
             borderRadiusDp = 12,
             elevationEnabled = true
@@ -71,6 +72,7 @@ object BrandCatalog {
             colorError = "#EF4444",
             colorOnPrimary = "#FFFFFF",
             colorOnBackground = "#1A1A2E",
+            colorOnSurface = "#6B7280",
             fontFamilyName = "Inter",
             borderRadiusDp = 16,
             elevationEnabled = false
@@ -113,6 +115,7 @@ object BrandCatalog {
             colorError = "#B91C1C",
             colorOnPrimary = "#FFFFFF",
             colorOnBackground = "#1A1A1A",
+            colorOnSurface = "#6B6B6B",
             fontFamilyName = "Georgia",
             borderRadiusDp = 4,
             elevationEnabled = true

@@ -55,6 +55,9 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
             implementation(libs.sqldelight.android.driver)
+            implementation(libs.androidx.fragment)
+            implementation(libs.androidx.biometric)
+            implementation(libs.androidx.security.crypto)
         }
 
         iosMain.dependencies {

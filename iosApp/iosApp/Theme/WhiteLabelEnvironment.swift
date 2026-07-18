@@ -26,5 +26,7 @@ extension WhiteLabelConfig {
     var backgroundColor: Color { Color(hex: theme.colorBackground) }
     var onPrimaryColor: Color { Color(hex: theme.colorOnPrimary) }
     var onBackgroundColor: Color { Color(hex: theme.colorOnBackground) }
+    var onSurfaceColor: Color { Color(hex: theme.colorOnSurface) }
+    var errorColor: Color { Color(hex: theme.colorError) }
     var cornerRadius: CGFloat { CGFloat(theme.borderRadiusDp) }
 }
