@@ -210,3 +210,4 @@ ZStack {
 - [ ] Texto regulatório 10sp, rgba(255,255,255,0.45)  
 - [ ] Padding rodapé: 40dp bottom  
 - [ ] Status bar: transparente, ícones brancos  
+
