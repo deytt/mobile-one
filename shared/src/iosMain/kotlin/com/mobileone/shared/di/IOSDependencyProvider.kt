@@ -2,23 +2,31 @@ package com.mobileone.shared.di
 
 import com.mobileone.shared.domain.entity.Account
 import com.mobileone.shared.domain.entity.AuthToken
+import com.mobileone.shared.domain.entity.PixKeyType
+import com.mobileone.shared.domain.entity.PixTransferRequest
 import com.mobileone.shared.domain.entity.TransactionPage
 import com.mobileone.shared.domain.error.AuthDomainError
 import com.mobileone.shared.domain.error.toAuthDomainError
 import com.mobileone.shared.domain.repository.SessionRepository
+import com.mobileone.shared.domain.usecase.DetectPixKeyTypeUseCase
+import com.mobileone.shared.domain.usecase.ExecutePixTransferUseCase
 import com.mobileone.shared.domain.usecase.GetTransactionHistoryUseCase
 import com.mobileone.shared.domain.usecase.LoginWithBiometricUseCase
 import com.mobileone.shared.domain.usecase.LoginWithCredentialsUseCase
+import com.mobileone.shared.domain.usecase.LookupPixRecipientUseCase
 import com.mobileone.shared.domain.usecase.ObserveAccountUseCase
+import com.mobileone.shared.domain.usecase.ParsePixQRCodeUseCase
 import com.mobileone.shared.domain.usecase.RefreshAccountDataUseCase
 import com.mobileone.shared.domain.usecase.SetupBiometricLoginUseCase
 import com.mobileone.shared.domain.usecase.SwitchBrandUseCase
 import com.mobileone.shared.domain.usecase.ToggleBalanceVisibilityUseCase
+import com.mobileone.shared.domain.usecase.ValidatePixKeyUseCase
 import com.mobileone.shared.data.repository.FakeAccountRepository
 import com.mobileone.shared.config.AppStateRepository
 import com.mobileone.shared.config.BrandCatalog
 import com.mobileone.shared.config.WhiteLabelConfig
 import com.mobileone.shared.security.BiometricAuthenticator
+import com.mobileone.shared.security.QRCodeScanner
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -136,6 +144,86 @@ object IOSDependencyProvider : KoinComponent {
 
     suspend fun switchBrand(brandId: String) = switchBrandUseCase(brandId)
 
+    // ── PIX (SPEC-003) ─────────────────────────────────────────────────────────
+
+    private val detectPixKeyTypeUseCase: DetectPixKeyTypeUseCase get() = get()
+    private val validatePixKeyUseCase: ValidatePixKeyUseCase get() = get()
+    private val lookupPixRecipientUseCase: LookupPixRecipientUseCase get() = get()
+    private val executePixTransferUseCase: ExecutePixTransferUseCase get() = get()
+    private val parsePixQRCodeUseCase: ParsePixQRCodeUseCase get() = get()
+    private val qrCodeScanner: QRCodeScanner get() = get()
+
+    fun detectPixKeyType(input: String): String? = when (detectPixKeyTypeUseCase(input)) {
+        is PixKeyType.CPF -> "CPF"
+        is PixKeyType.CNPJ -> "CNPJ"
+        is PixKeyType.Phone -> "Phone"
+        is PixKeyType.Email -> "Email"
+        is PixKeyType.RandomKey -> "RandomKey"
+        is PixKeyType.QRCode -> "QRCode"
+        null -> null
+    }
+
+    fun validatePixKey(key: String, typeString: String): String? {
+        val type = typeString.toPixKeyType() ?: return "Tipo de chave desconhecido"
+        return validatePixKeyUseCase(key, type).exceptionOrNull()?.message
+    }
+
+    suspend fun lookupPixRecipient(pixKey: String): PixRecipientOutcome =
+        lookupPixRecipientUseCase(pixKey).fold(
+            onSuccess = { PixRecipientOutcome.success(it) },
+            onFailure = { PixRecipientOutcome.failure(it.message ?: "Destinatário não encontrado") }
+        )
+
+    suspend fun executePixTransfer(
+        pixKey: String,
+        typeString: String,
+        amountCents: Long,
+        description: String,
+        recipientName: String,
+        recipientInstitution: String
+    ): PixReceiptOutcome {
+        val type = typeString.toPixKeyType() ?: return PixReceiptOutcome.failure("Tipo de chave inválido")
+        val request = PixTransferRequest(
+            pixKey = pixKey,
+            pixKeyType = type,
+            amountCents = amountCents,
+            description = description,
+            recipientName = recipientName,
+            recipientTaxId = "",
+            recipientInstitution = recipientInstitution
+        )
+        return executePixTransferUseCase(request).fold(
+            onSuccess = { e2eId -> PixReceiptOutcome.success(e2eId) },
+            onFailure = { PixReceiptOutcome.failure(it.message ?: "Falha na transferência") }
+        )
+    }
+
+    suspend fun scanPixQRCode(): String? {
+        val result = qrCodeScanner.scan()
+        return result.getOrNull()
+    }
+
+    fun parsePixQRCode(payload: String): PixQRCodeOutcome =
+        parsePixQRCodeUseCase(payload).fold(
+            onSuccess = { data ->
+                PixQRCodeOutcome.success(
+                    pixKey = data.pixKey,
+                    keyType = when (data.pixKeyType) {
+                        is PixKeyType.CPF -> "CPF"
+                        is PixKeyType.CNPJ -> "CNPJ"
+                        is PixKeyType.Phone -> "Phone"
+                        is PixKeyType.Email -> "Email"
+                        is PixKeyType.RandomKey -> "RandomKey"
+                        is PixKeyType.QRCode -> "QRCode"
+                    },
+                    merchantName = data.merchantName,
+                    amountCents = data.amountCents ?: -1L,
+                    description = data.description
+                )
+            },
+            onFailure = { PixQRCodeOutcome.failure(it.message ?: "QR Code inválido") }
+        )
+
     // ──────────────────────────────────────────────────────────────────────────
 
     private fun Result<AuthToken>.toOutcome(): AuthTokenOutcome = fold(
@@ -184,4 +272,81 @@ class TransactionPageOutcome private constructor(
         fun success(page: TransactionPage) = TransactionPageOutcome(page, null)
         fun failure(message: String) = TransactionPageOutcome(null, message)
     }
+}
+
+/** Wrapper concreto para o resultado da consulta DICT PIX (SPEC-003). */
+class PixRecipientOutcome private constructor(
+    val name: String?,
+    val institution: String?,
+    val pixKey: String?,
+    val pixKeyType: String?,
+    val errorMessage: String?
+) {
+    val isSuccess: Boolean get() = name != null
+
+    companion object {
+        fun success(recipient: com.mobileone.shared.domain.entity.Recipient) = PixRecipientOutcome(
+            name = recipient.name,
+            institution = recipient.institution,
+            pixKey = recipient.pixKey,
+            pixKeyType = when (recipient.pixKeyType) {
+                is PixKeyType.CPF -> "CPF"
+                is PixKeyType.CNPJ -> "CNPJ"
+                is PixKeyType.Phone -> "Phone"
+                is PixKeyType.Email -> "Email"
+                is PixKeyType.RandomKey -> "RandomKey"
+                is PixKeyType.QRCode -> "QRCode"
+            },
+            errorMessage = null
+        )
+        fun failure(message: String) = PixRecipientOutcome(null, null, null, null, message)
+    }
+}
+
+/** Wrapper concreto para o e2eId gerado após uma transferência PIX (SPEC-003). */
+class PixReceiptOutcome private constructor(
+    val e2eId: String?,
+    val errorMessage: String?
+) {
+    val isSuccess: Boolean get() = e2eId != null
+
+    companion object {
+        fun success(e2eId: String) = PixReceiptOutcome(e2eId, null)
+        fun failure(message: String) = PixReceiptOutcome(null, message)
+    }
+}
+
+/** Wrapper concreto para os dados extraídos de um QR Code PIX (SPEC-003). */
+class PixQRCodeOutcome private constructor(
+    val pixKey: String?,
+    val keyType: String?,
+    val merchantName: String?,
+    val amountCents: Long,
+    val description: String?,
+    val errorMessage: String?
+) {
+    val isSuccess: Boolean get() = pixKey != null
+
+    companion object {
+        fun success(
+            pixKey: String,
+            keyType: String,
+            merchantName: String,
+            amountCents: Long,
+            description: String
+        ) = PixQRCodeOutcome(pixKey, keyType, merchantName, amountCents, description, null)
+
+        fun failure(message: String) = PixQRCodeOutcome(null, null, null, -1L, null, message)
+    }
+}
+
+/** Converte a string de tipo de chave para o sealed class do domínio. */
+private fun String.toPixKeyType(): PixKeyType? = when (this) {
+    "CPF" -> PixKeyType.CPF
+    "CNPJ" -> PixKeyType.CNPJ
+    "Phone" -> PixKeyType.Phone
+    "Email" -> PixKeyType.Email
+    "RandomKey" -> PixKeyType.RandomKey
+    "QRCode" -> PixKeyType.QRCode
+    else -> null
 }
