@@ -4,15 +4,16 @@ import shared
 private enum AppRoute: Hashable {
     case login
     case biometricWelcome
-    case home
+    case homeCartoes
+    case homeConta
     case brandSwitcher
     case pix
 }
 
-/// Raiz de navegação do app (SPEC-001 + SPEC-002):
+/// Raiz de navegação do app (SPEC-001 + SPEC-002 + SPEC-009):
 /// - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
-/// - Autenticação converge para Home real com saldo/extrato (SPEC-002)
-/// - Home expõe ícone ⚙ que navega para BrandSwitcher (SPEC-004)
+/// - Autenticação converge para Home de Cartões (SPEC-009)
+/// - Bottom Tab Bar alterna Cartões ↔ Conta; botão grade abre BrandSwitcher
 struct MobileOneRootView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @EnvironmentObject private var configObserver: AppConfigObserver
@@ -34,7 +35,7 @@ struct MobileOneRootView: View {
         }
         .onChange(of: authViewModel.uiState.navigateToHome) { _, navigate in
             guard navigate else { return }
-            path = NavigationPath([AppRoute.home])
+            path = NavigationPath([AppRoute.homeCartoes])
             authViewModel.onConsumeNavigation()
         }
         .alert(
@@ -64,8 +65,21 @@ struct MobileOneRootView: View {
             })
             .navigationBarBackButtonHidden(true)
             .toolbar(.hidden, for: .navigationBar)
-        case .home:
+        case .homeCartoes:
+            HomeCartoesView(
+                onNavigateToConta: {
+                    path = NavigationPath([AppRoute.homeConta])
+                },
+                onBrandSwitcherTap: {
+                    path.append(AppRoute.brandSwitcher)
+                }
+            )
+            .navigationBarBackButtonHidden(true)
+        case .homeConta:
             HomeView(
+                onNavigateToCartoes: {
+                    path = NavigationPath([AppRoute.homeCartoes])
+                },
                 onBrandSwitcherTap: {
                     path.append(AppRoute.brandSwitcher)
                 },
@@ -82,9 +96,7 @@ struct MobileOneRootView: View {
             BrandSwitcherView(
                 onBack: { path.removeLast() },
                 onApplied: { _ in
-                    // Tema já foi aplicado via AppConfigObserver (observado em iosAppApp).
-                    // Volta para Home — o Environment já reflete o novo config.
-                    path.removeLast()
+                    path = NavigationPath([AppRoute.homeCartoes])
                 }
             )
         case .pix:

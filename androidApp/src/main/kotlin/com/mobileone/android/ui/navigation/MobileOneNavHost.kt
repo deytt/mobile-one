@@ -15,6 +15,7 @@ import com.mobileone.android.ui.screen.auth.BiometricWelcomeScreen
 import com.mobileone.android.ui.screen.auth.LoginScreen
 import com.mobileone.android.ui.screen.auth.SplashScreen
 import com.mobileone.android.ui.screen.brandSwitcher.BrandSwitcherScreen
+import com.mobileone.android.ui.screen.home.HomeCartoesScreen
 import com.mobileone.android.ui.screen.home.HomeScreen
 import com.mobileone.android.ui.screen.pix.PixFlowScreen
 import com.mobileone.android.viewmodel.AuthViewModel
@@ -25,16 +26,17 @@ private object Routes {
     const val SPLASH = "splash"
     const val LOGIN = "login"
     const val BIOMETRIC_WELCOME = "biometricWelcome"
-    const val HOME = "home"
+    const val HOME_CARTOES = "homeCartoes"
+    const val HOME_CONTA = "homeConta"
     const val BRAND_SWITCHER = "brandSwitcher"
     const val PIX = "pix"
 }
 
 /**
- * Rotas do app (SPEC-001 + SPEC-002):
+ * Rotas do app (SPEC-001 + SPEC-002 + SPEC-009):
  * - Splash decide entre Login e Boas-vindas com biometria (SPEC-001)
- * - Autenticação converge para Home real (SPEC-002)
- * - Home expõe ícone ⚙ que navega para BrandSwitcher (SPEC-004)
+ * - Autenticação converge para Home de Cartões (SPEC-009)
+ * - Bottom Tab Bar alterna Cartões ↔ Conta; botão grade abre BrandSwitcher
  */
 @Composable
 fun MobileOneNavHost(navController: NavHostController = rememberNavController()) {
@@ -43,7 +45,7 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
 
     LaunchedEffect(uiState.navigation) {
         if (uiState.navigation == AuthNavigation.ToHome) {
-            navController.navigate(Routes.HOME) {
+            navController.navigate(Routes.HOME_CARTOES) {
                 popUpTo(0) { inclusive = true }
             }
             authViewModel.onConsumeNavigation()
@@ -82,8 +84,27 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
                 viewModel = authViewModel
             )
         }
-        composable(Routes.HOME) {
+        composable(Routes.HOME_CARTOES) {
+            HomeCartoesScreen(
+                onNavigateToConta = {
+                    navController.navigate(Routes.HOME_CONTA) {
+                        popUpTo(Routes.HOME_CARTOES) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                onBrandSwitcherClick = {
+                    navController.navigate(Routes.BRAND_SWITCHER)
+                }
+            )
+        }
+        composable(Routes.HOME_CONTA) {
             HomeScreen(
+                onNavigateToCartoes = {
+                    navController.navigate(Routes.HOME_CARTOES) {
+                        popUpTo(Routes.HOME_CONTA) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
                 onBrandSwitcherClick = {
                     navController.navigate(Routes.BRAND_SWITCHER)
                 },
@@ -102,8 +123,8 @@ fun MobileOneNavHost(navController: NavHostController = rememberNavController())
             BrandSwitcherScreen(
                 onBack = { navController.popBackStack() },
                 onApplied = {
-                    navController.navigate(Routes.HOME) {
-                        popUpTo(Routes.HOME) { inclusive = true }
+                    navController.navigate(Routes.HOME_CARTOES) {
+                        popUpTo(Routes.HOME_CARTOES) { inclusive = true }
                     }
                 }
             )

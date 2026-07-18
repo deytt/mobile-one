@@ -6,6 +6,7 @@ import shared
  * [HomeContent] stateless — segue `.cursor/rules/06-ios-conventions.mdc`.
  */
 struct HomeView: View {
+    var onNavigateToCartoes: () -> Void = {}
     let onBrandSwitcherTap: () -> Void
     var onPixTap: () -> Void = {}
     let onLogoutTap: () -> Void
@@ -21,6 +22,7 @@ struct HomeView: View {
             onLoadMore: viewModel.onLoadMore,
             onToggleBalance: viewModel.onToggleBalance,
             onDismissError: viewModel.onDismissError,
+            onNavigateToCartoes: onNavigateToCartoes,
             onBrandSwitcherTap: onBrandSwitcherTap,
             onPixTap: onPixTap,
             onLogoutTap: onLogoutTap
@@ -36,28 +38,32 @@ struct HomeContent: View {
     let onLoadMore: () -> Void
     let onToggleBalance: () -> Void
     let onDismissError: () -> Void
+    var onNavigateToCartoes: () -> Void = {}
     let onBrandSwitcherTap: () -> Void
     var onPixTap: () -> Void = {}
     let onLogoutTap: () -> Void
 
     var body: some View {
-        Group {
-            if uiState.isLoading && uiState.account == nil {
-                loadingContent
-            } else {
-                mainList
+        VStack(spacing: 0) {
+            Group {
+                if uiState.isLoading && uiState.account == nil {
+                    loadingContent
+                } else {
+                    mainList
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            HomeTabBar(
+                currentTab: .conta,
+                onTabChange: { tab in
+                    if tab == .cartoes { onNavigateToCartoes() }
+                },
+                onBrandSwitcher: onBrandSwitcherTap
+            )
         }
         .navigationTitle(config.brandName)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: onBrandSwitcherTap) {
-                    Image(systemName: "gearshape")
-                        .foregroundStyle(config.onPrimaryColor)
-                }
-            }
-        }
         .toolbarBackground(config.primaryColor, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .alert(
@@ -186,5 +192,6 @@ struct HomeContent: View {
         onBrandSwitcherTap: {},
         onLogoutTap: {}
     )
-    .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPrincipal())
+        .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPrincipal())
+        .environment(\.brandTheme, BrandTheme(config: BrandCatalog.shared.bancoPrincipal()))
 }

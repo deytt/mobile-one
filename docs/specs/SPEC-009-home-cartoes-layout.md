@@ -282,16 +282,16 @@ struct HomeTabBar: View {
 
 ## Checklist de Ajuste
 
-- [ ] Status bar `colorPrimary`, ícones brancos  
-- [ ] Header `colorPrimary`, avatar 40dp, sino 24dp  
-- [ ] Card fatura com `borderRadiusDp` da marca  
-- [ ] "Fatura aberta" 12sp, valor 28sp bold  
-- [ ] Botões "Pagar fatura" e "Meus cartões" flex-1, altura 44dp  
-- [ ] Section "Meu limite" com barra de progresso `colorPrimary`  
-- [ ] Lista de compras com ícones 40dp e badge `colorSecondary`  
-- [ ] **NOVO** Bottom Bar com pílula switcher Cartões/Conta  
-- [ ] Aba ativa pill preenchida `colorPrimary`, inativa sem fill  
-- [ ] Animação na troca de aba  
-- [ ] **NOVO** Botão grade 44dp círculo `colorPrimary` no canto direito  
-- [ ] Botão grade navega para BrandSwitcher  
-- [ ] Bottom bar respeita safe area inferior  
+- [x] Status bar `colorPrimary`, ícones brancos  
+- [x] Header `colorPrimary`, avatar 40dp, sino 24dp  
+- [x] Card fatura com `borderRadiusDp` da marca  
+- [x] "Fatura aberta" 12sp, valor 28sp bold  
+- [x] Botões "Pagar fatura" e "Meus cartões" flex-1, altura 44dp  
+- [x] Section "Meu limite" com barra de progresso `colorPrimary`  
+- [x] Lista de compras com ícones 40dp e badge `colorSecondary`  
+- [x] **NOVO** Bottom Bar com pílula switcher Cartões/Conta  
+- [x] Aba ativa pill preenchida `colorPrimary`, inativa sem fill  
+- [x] Animação na troca de aba  
+- [x] **NOVO** Botão grade 44dp círculo `colorPrimary` no canto direito  
+- [x] Botão grade navega para BrandSwitcher  
+- [x] Bottom bar respeita safe area inferior  
