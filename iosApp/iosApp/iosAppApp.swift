@@ -30,6 +30,7 @@ struct iosAppApp: App {
         WindowGroup {
             MobileOneRootView()
                 .environment(\.whiteLabelConfig, configObserver.config)
+                .environment(\.brandTheme, BrandTheme(config: configObserver.config))
                 .environmentObject(configObserver)
         }
     }

@@ -29,6 +29,12 @@ targets:
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
         NSFaceIDUsageDescription: "Use o Face ID para entrar na sua conta com segurança."
+        # Inter (SPEC-005 / Fintech Verde). Georgia e SF Pro (Roboto fallback) vêm do sistema.
+        UIAppFonts:
+          - Inter-Regular.ttf
+          - Inter-Medium.ttf
+          - Inter-SemiBold.ttf
+          - Inter-Bold.ttf
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mobileone.ios

@@ -102,5 +102,6 @@ struct MobileOneRootView: View {
 #Preview {
     MobileOneRootView()
         .environment(\.whiteLabelConfig, BrandCatalog.shared.bancoPrincipal())
+        .environment(\.brandTheme, BrandTheme(config: BrandCatalog.shared.bancoPrincipal()))
         .environmentObject(AppConfigObserver())
 }
