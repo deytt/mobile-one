@@ -60,8 +60,7 @@ fun HomeTabBar(
         ) {
             TabSwitcher(
                 activeTab = currentTab,
-                onTabChange = onTabChange,
-                modifier = Modifier.weight(1f, fill = false)
+                onTabChange = onTabChange
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -115,6 +114,8 @@ private fun TabSwitcher(
                 Text(
                     text = tab.title,
                     color = fg,
+                    maxLines = 1,
+                    softWrap = false,
                     style = MaterialTheme.typography.labelLarge.copy(
                         fontSize = 14.sp,
                         fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Medium
