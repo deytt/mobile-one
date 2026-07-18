@@ -1,6 +1,6 @@
 # SPEC-011 — Brand Switcher: Ajuste de Layout
 
-**Status:** Pronto para implementação  
+**Status:** Implementado  
 **Tipo:** Layout / Feature  
 **Figma:** [Brand Switcher](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-3733)
 
@@ -330,20 +330,20 @@ struct BrandSwitcherView: View {
 
 ## Checklist de Ajuste
 
-- [ ] Status bar `#1A1A2E`, ícones brancos (independente da marca ativa)  
-- [ ] Header `#1A1A2E`, título 18sp Inter Bold branco  
-- [ ] Badge "DEV MODE" laranja `#F7941D`, posição absoluta canto superior direito  
-- [ ] Subtítulo "Modo de demonstração" 12sp `rgba(255,255,255,0.45)`  
-- [ ] Background do corpo: `#F4F4F6`  
-- [ ] Label seção "SELECIONAR MARCA" 11sp uppercase, letter-spacing 0.77  
-- [ ] Cards com border 2dp: invisível (não selecionado) / `colorPrimary` (selecionado)  
-- [ ] Radio button: borda `#D1D5DB` vs preenchido `colorPrimary`  
-- [ ] Brand Avatar 24dp com shape e cor da marca do item  
-- [ ] Nome da marca com **fonte da marca do item** (não da ativa)  
-- [ ] Descrição 11sp Inter: "{fonte} · {radius}px radius"  
-- [ ] Pills de cores com dot + hex, background `rgba(cor, 0.09)`  
-- [ ] Check icon 16dp visível apenas no selecionado  
-- [ ] Botão "Aplicar marca" com `colorPrimary` da marca **selecionada**  
-- [ ] border-radius do botão: 12dp (fixo)  
-- [ ] Nota de rodapé 11sp `#9CA3AF`, centralizado  
+- [x] Status bar `#1A1A2E`, ícones brancos (independente da marca ativa)  
+- [x] Header `#1A1A2E`, título 18sp Inter Bold branco  
+- [x] Badge "DEV MODE" laranja `#F7941D`, posição absoluta canto superior direito  
+- [x] Subtítulo "Modo de demonstração" 12sp `rgba(255,255,255,0.45)`  
+- [x] Background do corpo: `#F4F4F6`  
+- [x] Label seção "SELECIONAR MARCA" 11sp uppercase, letter-spacing 0.77  
+- [x] Cards com border 2dp: invisível (não selecionado) / `colorPrimary` (selecionado)  
+- [x] Radio button: borda `#D1D5DB` vs preenchido `colorPrimary`  
+- [x] Brand Avatar 24dp com shape e cor da marca do item  
+- [x] Nome da marca com **fonte da marca do item** (não da ativa)  
+- [x] Descrição 11sp Inter: "{fonte} · {radius}px radius"  
+- [x] Pills de cores com dot + hex, background `rgba(cor, 0.09)`  
+- [x] Check icon 16dp visível apenas no selecionado  
+- [x] Botão "Aplicar marca" com `colorPrimary` da marca **selecionada**  
+- [x] border-radius do botão: 12dp (fixo)  
+- [x] Nota de rodapé 11sp `#9CA3AF`, centralizado  
 - [ ] Ao aplicar: `WhiteLabelConfig` atualizado → toda UI re-renderiza  
