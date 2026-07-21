@@ -44,7 +44,7 @@ class SessionRepositoryImpl(
     }
 
     override suspend fun extendSession() {
-        // Sessão nesta POC não expira; hook reservado para uma futura renovação real de token.
+        // Ponto de extensão para renovação de token quando houver integração com backend.
     }
 
     override suspend fun currentUserName(): String? =

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 
 /**
- * Repositório de conta falso para a POC (SPEC-002). Simula cache local + refresh de API.
- * Em produção seria substituído por `AccountRepositoryImpl` (SQLDelight + Ktor).
+ * Implementação em memória de [AccountRepository] para validação local da SPEC-002.
+ * Uma implementação integrada deve usar SQLDelight + Ktor.
  */
 class FakeAccountRepository : AccountRepository {
 

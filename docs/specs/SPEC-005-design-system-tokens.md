@@ -1,14 +1,14 @@
 # SPEC-005 — Design System: Tokens e Temas White-Label
 
-**Status:** Pronto para implementação  
-**Tipo:** Layout / Theme  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-4371) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-4521) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-4671)
+**Status:** Pronto para implementação
+**Tipo:** Layout / Theme
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Garantir que `WhiteLabelConfig` e os temas nativos (Compose `MaterialTheme` e SwiftUI `EnvironmentValues`) reflitam fielmente os tokens extraídos do Figma para as 3 marcas da POC. Esta spec serve de **referência** para todos os outros specs de layout.
+Garantir que `WhiteLabelConfig` e os temas nativos (Compose `MaterialTheme` e SwiftUI `EnvironmentValues`) reflitam fielmente os tokens definidos no Figma corporativo para as marcas previstas. Esta spec serve de **referência** para as demais specs de layout.
 
 ---
 
@@ -56,22 +56,22 @@ Garantir que `WhiteLabelConfig` e os temas nativos (Compose `MaterialTheme` e Sw
 Cada marca possui um identificador visual exibido na barra superior e no Splash:
 
 ### Banco Principal
-- Fundo: `colorPrimary` (#003B6F)  
-- Container: `rgba(255,255,255,0.18)`, radius = `borderRadiusDp` (12dp)  
-- Texto: iniciais "BP", Roboto Bold, branco  
-- Nome: Roboto Bold  
+- Fundo: `colorPrimary` (#003B6F)
+- Container: `rgba(255,255,255,0.18)`, radius = `borderRadiusDp` (12dp)
+- Texto: iniciais "BP", Roboto Bold, branco
+- Nome: Roboto Bold
 
 ### Fintech Verde
-- Fundo: `colorPrimary` (#00A86B)  
-- Container: `rgba(255,255,255,0.18)`, radius = `borderRadiusDp` (16dp, circular)  
-- Texto: iniciais "FV", Inter SemiBold, branco  
-- Nome: Inter SemiBold  
+- Fundo: `colorPrimary` (#00A86B)
+- Container: `rgba(255,255,255,0.18)`, radius = `borderRadiusDp` (16dp, circular)
+- Texto: iniciais "FV", Inter SemiBold, branco
+- Nome: Inter SemiBold
 
 ### Banco Premium
-- Fundo: `colorPrimary` (#7B2D00)  
-- Container: losango rotacionado 45°, `rgba(255,255,255,0.15)`, radius = 4dp  
-- Texto: iniciais "BP", Georgia Bold Italic, branco  
-- Nome: Georgia Bold Italic, letter-spacing +0.16  
+- Fundo: `colorPrimary` (#7B2D00)
+- Container: losango rotacionado 45°, `rgba(255,255,255,0.15)`, radius = 4dp
+- Texto: iniciais "BP", Georgia Bold Italic, branco
+- Nome: Georgia Bold Italic, letter-spacing +0.16
 
 ---
 
@@ -131,9 +131,9 @@ struct BrandTheme {
 ```
 
 #### `BrandFonts.swift` — registrar fontes:
-- Banco Principal: `UIFont.systemFont` (Roboto disponível no sistema, ou bundle)  
-- Fintech Verde: adicionar `Inter-*.ttf` ao bundle iOS  
-- Banco Premium: adicionar `Georgia-*.ttf` (já disponível no sistema iOS)  
+- Banco Principal: `UIFont.systemFont` (Roboto disponível no sistema, ou bundle)
+- Fintech Verde: adicionar `Inter-*.ttf` ao bundle iOS
+- Banco Premium: adicionar `Georgia-*.ttf` (já disponível no sistema iOS)
 
 #### Environment extension:
 ```swift
@@ -146,11 +146,11 @@ extension EnvironmentValues {
 
 ## Checklist de Ajuste
 
-- [ ] `WhiteLabelConfig.kt` com tokens atualizados para as 3 marcas  
-- [ ] `Color.kt` reflete os 8 tokens de cor por marca  
-- [ ] `Shape.kt` aplica `borderRadiusDp` da marca ativa  
-- [ ] `Typography.kt` carrega a fonte correta da marca  
-- [ ] `BrandTheme.swift` (iOS) com os mesmos 8 tokens  
-- [ ] Fontes Inter e Georgia registradas no bundle iOS  
-- [ ] Compose `MaterialTheme` wrapper recebe config da marca ativa  
-- [ ] SwiftUI `EnvironmentObject` / `Environment` propagam `BrandTheme`  
+- [ ] `WhiteLabelConfig.kt` com tokens atualizados para as 3 marcas
+- [ ] `Color.kt` reflete os 8 tokens de cor por marca
+- [ ] `Shape.kt` aplica `borderRadiusDp` da marca ativa
+- [ ] `Typography.kt` carrega a fonte correta da marca
+- [ ] `BrandTheme.swift` (iOS) com os mesmos 8 tokens
+- [ ] Fontes Inter e Georgia registradas no bundle iOS
+- [ ] Compose `MaterialTheme` wrapper recebe config da marca ativa
+- [ ] SwiftUI `EnvironmentObject` / `Environment` propagam `BrandTheme`

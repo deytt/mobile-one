@@ -5,7 +5,7 @@ import com.mobileone.shared.domain.entity.PixTransferRequest
 
 /**
  * Contrato de acesso a dados do fluxo PIX (SPEC-003).
- * Na POC, implementado por [FakePixRepository]. Em produção, chamaria o DICT via Ktor.
+ * Implementações integradas devem consultar o DICT via Ktor.
  */
 interface PixRepository {
     /**

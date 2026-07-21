@@ -3,7 +3,7 @@ package com.mobileone.shared.domain.repository
 import com.mobileone.shared.domain.entity.Account
 import kotlinx.coroutines.flow.Flow
 
-/** Contrato de acesso aos dados de conta (SPEC-002). Implementações: Fake (POC) e real (Ktor+SQLDelight). */
+/** Contrato de acesso aos dados de conta (SPEC-002). */
 interface AccountRepository {
     /** Emite a conta do cache local imediatamente, depois atualiza conforme o banco de dados. */
     fun observeAccount(accountId: String): Flow<Account>

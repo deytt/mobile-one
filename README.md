@@ -1,143 +1,133 @@
 # mobile-one
 
-> *One codebase. Native experience.*
+> One codebase. Native experience.
 
-POC técnica para demonstrar que **Kotlin Multiplatform (KMP) com UI nativa** é uma alternativa superior ao React Native para um aplicativo bancário cross-platform e white-label.
+Prova de conceito técnica para avaliar **Kotlin Multiplatform (KMP) com interfaces nativas** como arquitetura cross-platform para aplicativos bancários com suporte a white-label.
 
----
+O projeto valida o compartilhamento das camadas de domínio, dados, configuração e segurança, mantendo as interfaces em Jetpack Compose no Android e SwiftUI no iOS.
 
-## Telas do app (white-label)
+## Visão Geral
 
-As mesmas telas, nas **3 marcas** da POC — Banco Principal (`#003B6F`), Fintech Verde (`#00A86B`) e Banco Premium (`#782D00`). Designs de referência no [Figma Mobile-One](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One).
+A arquitetura proposta separa as responsabilidades por camada:
 
-| Marca | Primary | Tipografia | Radius |
-|---|---|---|---|
-| Banco Principal | `#003B6F` | Roboto | 12dp |
-| Fintech Verde | `#00A86B` | Inter | 16dp |
-| Banco Premium | `#782D00` | Georgia | 4dp |
+| Camada | Tecnologia | Responsabilidade |
+|---|---|---|
+| Shared | Kotlin Multiplatform | Domínio, dados, validações, configuração, contratos de segurança |
+| Android | Jetpack Compose | Interface nativa e integração com APIs Android |
+| iOS | SwiftUI | Interface nativa e integração com APIs iOS |
+| HTTP | Ktor | Cliente HTTP compartilhado |
+| Persistência | SQLDelight | Schema e queries compartilhados com drivers nativos |
+| DI | Koin | Injeção de dependência no módulo compartilhado |
+| Assíncrono | Coroutines + Flow | Estado reativo e operações assíncronas |
+
+## Telas Implementadas
+
+As telas abaixo demonstram a aplicação dos mesmos contratos compartilhados em três configurações de marca.
 
 ### Splash
 
-![Splash — 3 marcas](docs/assets/screenshots/splash-brands.png)
+![Splash - 3 marcas](docs/assets/screenshots/splash-brands.png)
 
 ### Login
 
-![Login — 3 marcas](docs/assets/screenshots/login-brands.png)
+![Login - 3 marcas](docs/assets/screenshots/login-brands.png)
 
 ### Biometria
 
-![Biometria — 3 marcas](docs/assets/screenshots/biometria-brands.png)
+![Biometria - 3 marcas](docs/assets/screenshots/biometria-brands.png)
 
 ### Home / Conta
 
-![Home Conta — 3 marcas](docs/assets/screenshots/home-conta-brands.png)
+![Home Conta - 3 marcas](docs/assets/screenshots/home-conta-brands.png)
 
 ### Home / Cartões
 
-![Home Cartões — 3 marcas](docs/assets/screenshots/home-cartoes-brands.png)
+![Home Cartões - 3 marcas](docs/assets/screenshots/home-cartoes-brands.png)
 
 ### Brand Switcher
 
-![Brand Switcher — 3 marcas](docs/assets/screenshots/brand-switcher-brands.png)
+![Brand Switcher - 3 marcas](docs/assets/screenshots/brand-switcher-brands.png)
 
----
+## Estrutura do Projeto
 
-## Estrutura do projeto
-
-```
+```text
 mobile-one/
-├── .cursor/rules/          # Contexto do projeto para agentes de IA (Memory Bank)
 ├── docs/
-│   ├── assets/screenshots/ # Previews das telas (3 marcas) para o README
-│   ├── adr/                # Architecture Decision Records — decisões e argumentos
-│   ├── specs/              # Especificações de features e contratos de interface
-│   └── poc-pitch/          # Material de apresentação + métricas reais
-├── shared/                 # KMP — Kotlin Multiplatform (dados + domínio)
-├── androidApp/             # Android — Jetpack Compose
-└── iosApp/                 # iOS — SwiftUI
+│   ├── adr/                # Architecture Decision Records
+│   ├── assets/screenshots/ # Evidências visuais da POC
+│   ├── confluence/         # Páginas base para documentação corporativa
+│   ├── figma/              # Mapeamento de referências visuais
+│   └── specs/              # Especificações técnicas das features
+├── shared/                 # Kotlin Multiplatform: dados, domínio e contratos
+├── androidApp/             # Android: Jetpack Compose
+└── iosApp/                 # iOS: SwiftUI
 ```
 
 ## Documentação
 
-### Architecture Decision Records (ADRs)
+### Páginas para Confluence
 
-As decisões arquiteturais da POC ficam em `docs/adr/`. Elas explicam o racional técnico usado no pitch para comparar KMP + UI nativa com React Native.
+Os arquivos em `docs/confluence/` foram preparados para publicação como páginas de documentação técnica:
 
-| ADR | Decisão | Por que importa para a POC | Status |
-|---|---|---|---|
-| [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md) | KMP com UI nativa vs React Native | Define a tese central: compartilhar dados/domínio e preservar UX nativa | Aceito |
-| [ADR-002](docs/adr/ADR-002-sqldelight-persistencia.md) | SQLDelight como persistência compartilhada | Mantém schema e queries em Kotlin Multiplatform, com drivers nativos | Aceito |
-| [ADR-003](docs/adr/ADR-003-ktor-http-client.md) | Ktor como HTTP client compartilhado | Evita duplicar camada de rede entre Android e iOS | Aceito |
-| [ADR-004](docs/adr/ADR-004-white-label-strategy.md) | Estratégia white-label via shared config | Centraliza marcas, tokens e feature flags no `shared` | Aceito |
-| [ADR-005](docs/adr/ADR-005-biometria-expect-actual.md) | Biometria e segurança via `expect/actual` | Usa APIs nativas para Face ID/Touch ID, BiometricPrompt e armazenamento seguro | Aceito |
+| Página | Objetivo |
+|---|---|
+| [Índice](docs/confluence/00-indice.md) | Estrutura sugerida do espaço no Confluence |
+| [Visão geral](docs/confluence/01-visao-geral.md) | Contexto, escopo e objetivos da prova de conceito |
+| [Comparativo técnico](docs/confluence/02-comparativo-kmp-ui-nativa-vs-react-native.md) | Avaliação técnica entre KMP com UI nativa e React Native |
+| [Arquitetura](docs/confluence/03-arquitetura-tecnica.md) | Organização de módulos, contratos e fluxo de dependências |
+| [Evidências e métricas](docs/confluence/04-evidencias-e-metricas.md) | Resultados medidos, testes e evidências visuais |
+| [Roadmap de adoção](docs/confluence/05-roadmap-de-adocao.md) | Estratégia incremental para evolução da arquitetura |
 
-### Specs de Features (POC)
+### ADRs
+
+| ADR | Decisão | Status |
+|---|---|---|
+| [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md) | KMP com UI nativa para compartilhamento de dados e domínio | Aceito |
+| [ADR-002](docs/adr/ADR-002-sqldelight-persistencia.md) | SQLDelight como persistência compartilhada | Aceito |
+| [ADR-003](docs/adr/ADR-003-ktor-http-client.md) | Ktor como HTTP client compartilhado | Aceito |
+| [ADR-004](docs/adr/ADR-004-white-label-strategy.md) | Estratégia white-label via configuração compartilhada | Aceito |
+| [ADR-005](docs/adr/ADR-005-biometria-expect-actual.md) | Biometria e segurança via `expect/actual` | Aceito |
+
+### Specs
 
 | Spec | Feature | Status |
 |---|---|---|
-| [SPEC-001](docs/specs/SPEC-001-login-biometrico.md) | Login com Autenticação Biométrica | Aprovado |
-| [SPEC-002](docs/specs/SPEC-002-saldo-extrato.md) | Saldo e Extrato de Conta | Aprovado |
+| [SPEC-001](docs/specs/SPEC-001-login-biometrico.md) | Login com autenticação biométrica | Aprovado |
+| [SPEC-002](docs/specs/SPEC-002-saldo-extrato.md) | Saldo e extrato de conta | Aprovado |
 | [SPEC-003](docs/specs/SPEC-003-pix.md) | Transferência PIX | Aprovado |
-| [SPEC-004](docs/specs/SPEC-004-white-label-config.md) | Demonstração White-Label | Aprovado |
+| [SPEC-004](docs/specs/SPEC-004-white-label-config.md) | Configuração white-label | Aprovado |
+| [SPEC-005](docs/specs/SPEC-005-design-system-tokens.md) | Tokens do design system | Aprovado |
+| [SPEC-006](docs/specs/SPEC-006-splash-layout.md) | Layout da Splash Screen | Aprovado |
+| [SPEC-007](docs/specs/SPEC-007-login-layout.md) | Layout de Login | Aprovado |
+| [SPEC-008](docs/specs/SPEC-008-biometria-layout.md) | Layout de Biometria | Aprovado |
+| [SPEC-009](docs/specs/SPEC-009-home-cartoes-layout.md) | Layout de Home / Cartões | Aprovado |
+| [SPEC-010](docs/specs/SPEC-010-home-conta-layout.md) | Layout de Home / Conta | Aprovado |
+| [SPEC-011](docs/specs/SPEC-011-brand-switcher-layout.md) | Layout de Brand Switcher | Aprovado |
 
-### Material de Apresentação
+## Métricas Técnicas
 
-- [Comparativo KMP vs React Native](docs/poc-pitch/comparativo-kmp-vs-react-native.md)
-- [Roadmap de Migração](docs/poc-pitch/roadmap-migracao.md)
-- [Métricas da POC (guia)](docs/poc-pitch/metricas-poc.md)
-- [Métricas reais — snapshot 2026-07-21](docs/poc-pitch/metricas-resultados.md)
+Medição reproduzível:
 
-## Métricas de código (2026-07-21)
+```bash
+python3 scripts/measure_code_metrics.py
+./gradlew :shared:allTests
+```
 
-Medição reproduzível: `python3 scripts/measure_code_metrics.py` · testes: `./gradlew :shared:allTests`.
+Snapshot técnico da POC:
 
-Detalhamento completo em [docs/poc-pitch/metricas-resultados.md](docs/poc-pitch/metricas-resultados.md).
+| Indicador | Resultado |
+|---|---:|
+| Módulo `shared` sobre o app total | 20,6% das linhas de código de produção |
+| `commonMain` dentro do módulo `shared` | 68,2% |
+| Lógica de negócio em `commonMain` | 100% |
+| Use cases e validadores compartilhados | 100% |
+| Testes no `shared` | 88 |
+| Falhas na suíte compartilhada | 0 |
+| Plataformas testadas | Android JVM e iOS Simulator |
 
-### Compartilhamento
+A métrica principal desta arquitetura não é maximizar o percentual total do repositório em código compartilhado. O objetivo é compartilhar as regras que devem permanecer consistentes entre plataformas, preservando UI e integrações nativas onde elas agregam mais valor.
 
-| Métrica | Valor |
-|---|---|
-| Módulo `shared` / app total (LOC code) | **20,6%** (2 220 / 10 765) |
-| Só `commonMain` / app total | **14,1%** (1 514 / 10 765) |
-| `commonMain` dentro do módulo `shared` | **68%** |
-| Lógica de negócio (domain + data + config) | **100%** em `commonMain` |
-| Use cases + validadores | **100%** compartilhados |
-
-| Source set | Arquivos | LOC (code) |
-|---|---:|---:|
-| `shared/commonMain` | 64 | 1 514 |
-| `shared/androidMain` + `iosMain` | 18 | 706 |
-| `androidApp` (Compose) | 40 | 5 179 |
-| `iosApp` (SwiftUI) | 36 | 3 366 |
-
-O % do app total fica abaixo da meta antiga de “65–80%” porque a **UI é 100% nativa** (Compose/SwiftUI) e concentra a maior parte das linhas — exatamente a tese do [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md): compartilhar regras de negócio, não a UI.
-
-### Cobertura de testes (shared)
-
-| Indicador | Valor |
-|---|---|
-| Testes em `commonTest` | **88** |
-| Falhas | **0** |
-| Plataformas | Android JVM + iOS Simulator (mesma suíte) |
-| Use cases com teste dedicado | **9 / 14 (64%)** |
-| White-label / config | **100%** dos arquivos com teste |
-| Validadores | Cobertura alta via `AuthValidatorTest` + `ValidatePixKeyUseCaseTest` |
-
-Lacunas prioritárias: `ExecutePixTransferUseCase`, `DetectPixKeyTypeUseCase`, `LookupPixRecipientUseCase`, `RefreshAccountDataUseCase`, `ToggleBalanceVisibilityUseCase`.
-
-## Stack
-
-| Camada | Tecnologia |
-|---|---|
-| Shared (dados + domínio) | Kotlin Multiplatform (KMP) |
-| Android UI | Jetpack Compose |
-| iOS UI | SwiftUI |
-| HTTP client | Ktor |
-| Persistência local | SQLDelight |
-| Injeção de dependência | Koin |
-| Async | Kotlin Coroutines + Flow |
-
-## Como rodar o projeto
+## Como Rodar
 
 ### Pré-requisitos
 
@@ -146,38 +136,23 @@ Lacunas prioritárias: `ExecutePixTransferUseCase`, `DetectPixKeyTypeUseCase`, `
 - Xcode com simulador iOS 17+
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen): `brew install xcodegen`
 
-### 1. Validar o módulo compartilhado
-
-Antes de subir os apps, valide que o `shared` compila e que a mesma suíte de testes roda nas duas plataformas:
+### Validar o módulo compartilhado
 
 ```bash
 ./gradlew :shared:build
 ./gradlew :shared:allTests
 ```
 
-### 2. Subir o app Android
-
-Via terminal:
+### Android
 
 ```bash
-# Gerar APK debug
 ./gradlew :androidApp:assembleDebug
-
-# Instalar em emulador/dispositivo conectado
 ./gradlew :androidApp:installDebug
 ```
 
-Via Android Studio:
+Também é possível abrir a raiz do projeto no Android Studio, selecionar a configuração `androidApp` e executar em um emulador ou dispositivo físico.
 
-1. Abra a raiz do repositório `mobile-one/`.
-2. Aguarde o sync do Gradle terminar.
-3. Selecione a configuração `androidApp`.
-4. Escolha um emulador ou dispositivo físico.
-5. Clique em Run.
-
-### 3. Subir o app iOS
-
-O projeto Xcode é gerado a partir de `iosApp/project.yml`, então gere o `.xcodeproj` antes de abrir no Xcode:
+### iOS
 
 ```bash
 cd iosApp
@@ -185,13 +160,9 @@ xcodegen generate
 open iosApp.xcodeproj
 ```
 
-No Xcode:
+No Xcode, selecione o scheme `iosApp` e execute em um simulador iOS 17+.
 
-1. Selecione o scheme `iosApp`.
-2. Escolha um simulador iOS 17+, por exemplo `iPhone 17 Pro`.
-3. Clique em Run.
-
-Também é possível buildar pelo terminal:
+Build pelo terminal:
 
 ```bash
 cd iosApp
@@ -200,40 +171,18 @@ xcodebuild -project iosApp.xcodeproj -scheme iosApp \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
-O target iOS possui uma fase de build que executa `./gradlew :shared:embedAndSignAppleFrameworkForXcode` automaticamente, embutindo o framework KMP `shared` mais recente no app.
+O target iOS possui uma fase de build que executa `./gradlew :shared:embedAndSignAppleFrameworkForXcode`, embutindo o framework KMP mais recente no app.
 
-### 4. Comandos úteis
+## Workflow de Desenvolvimento
 
-```bash
-# Métricas de compartilhamento de código
-python3 scripts/measure_code_metrics.py
+1. Escrever ou revisar a spec em `docs/specs/` antes de implementar.
+2. Definir contratos no `shared/commonMain`.
+3. Implementar domínio, dados e contratos `expect/actual` no `shared`.
+4. Adicionar testes em `shared/commonTest`.
+5. Implementar UI Android em Compose consumindo os contratos compartilhados.
+6. Implementar UI iOS em SwiftUI consumindo os mesmos contratos.
+7. Validar as evidências funcionais e atualizar a documentação aplicável.
 
-# Testes do shared nas plataformas configuradas
-./gradlew :shared:allTests
+## Referências de Design
 
-# Build Android debug
-./gradlew :androidApp:assembleDebug
-
-# Regenerar projeto iOS
-cd iosApp && xcodegen generate
-```
-
-## Workflow de desenvolvimento
-
-1. Escrever/revisar a **spec** em `docs/specs/` antes de qualquer código
-2. Definir contratos no `shared/commonMain` (interfaces, expect)
-3. Implementar no shared (use cases, repositórios, actual)
-4. Escrever testes do shared (rodam em Android e iOS)
-5. Criar telas no **Figma Make** → importar para Figma Design
-6. Implementar UI via **MCP do Figma** em Compose (Android) e SwiftUI (iOS)
-
-## Contexto
-
-Este projeto é uma POC criada pelo time de desenvolvimento Android/iOS de um banco para demonstrar aos gestores que existe uma alternativa ao React Native que:
-
-- Compartilha **100% da lógica de negócio** (domain + data + config em `commonMain`); o módulo `shared` representa ~**21%** do LOC do app com UI nativa já implementada
-- Mantém **performance 100% nativa** sem bridges JavaScript
-- Preserva o **know-how técnico** do time atual
-- Suporta **white-label** via configuração no shared
-- É viável para um **app bancário regulado** pelo Banco Central
-- Valida a lógica com **88 testes** que rodam iguais em Android e iOS
+As referências visuais devem ser registradas em `docs/figma/design-system.md`. O arquivo não deve conter links pessoais ou temporários; ao migrar para o ambiente corporativo, preencher com o file key e os node IDs oficiais do Figma da empresa.

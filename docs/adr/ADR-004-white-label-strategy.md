@@ -1,7 +1,7 @@
 # ADR-004: Estratégia White-Label via Configuração no Shared
 
-**Status:** Aceito  
-**Data:** 2026-07-17  
+**Status:** Aceito
+**Data:** 2026-07-17
 **Autores:** Time de Desenvolvimento Mobile
 
 ---
@@ -126,10 +126,10 @@ extension EnvironmentValues {
 - Ideal para: contratos B2B (app com a marca do parceiro)
 - Risco: manutenção de múltiplos pipelines de CI/CD
 
-### Opção 3: Híbrido (RECOMENDADO para POC)
+### Opção 3: Híbrido
 - Default config bundled (garante funcionamento offline)
 - Override remoto opcional ao conectar
-- Demonstra ambas as capacidades na POC
+- Permite validar configuração local e remota no mesmo modelo arquitetural
 
 ---
 
@@ -147,7 +147,7 @@ extension EnvironmentValues {
 - A mesma base de código serve múltiplos clientes sem fork
 - Feature flags permitem habilitar/desabilitar funcionalidades por cliente sem novo build (Opção 1)
 - Tema aplicado de forma centralizada — sem cores hardcoded espalhadas pelo código de UI
-- Demonstra ao gestor que o objetivo de white-label é atingível com esta arquitetura
+- Evidencia que o objetivo de white-label pode ser atendido sem bifurcar a base de código
 
 ### Negativas / Trade-offs aceitos
 - Remote Config (Opção 1) requer estratégia de fallback robusta para o app não ficar sem tema

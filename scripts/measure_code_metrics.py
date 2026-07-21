@@ -4,7 +4,7 @@
 Uso:
   python3 scripts/measure_code_metrics.py
 
-Critérios (alinhados a docs/poc-pitch/metricas-poc.md):
+Critérios alinhados ao relatório técnico em docs/confluence/04-evidencias-e-metricas.md:
   - Conta .kt / .swift / .sq (produção). commonTest é reportado à parte.
   - "code" = linhas não-vazias sem comentários // e /* */.
   - "physical" = todas as linhas do arquivo (inclui comentários/blank).

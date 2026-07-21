@@ -1,8 +1,8 @@
 # SPEC-007 — Login Screen: Ajuste de Layout e Flavor
 
-**Status:** Pronto para implementação  
-**Tipo:** Layout / Brand  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-4955) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-5162) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-5375)
+**Status:** Pronto para implementação
+**Tipo:** Layout / Brand
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
@@ -170,7 +170,7 @@ Column(
     ) {
         BrandLogoSmall(config)
     }
-    
+
     // Body
     Column(
         modifier = Modifier
@@ -185,18 +185,18 @@ Column(
         Text("Entre com seu CPF e senha", style = MaterialTheme.typography.bodyMedium,
              color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(24.dp)
-        
+
         // CPF Field
         FieldLabel("CPF")
         BrandTextField(value = cpf, placeholder = "000.000.000-00", trailingIcon = MaskIcon)
         Spacer(16.dp)
-        
+
         // Password Field
         FieldLabel("Senha")
         BrandTextField(value = password, placeholder = "••••••",
                        trailingIcon = if (showPass) EyeOffIcon else EyeIcon,
                        visualTransformation = if (showPass) Visual.None else PasswordVisual)
-        
+
         // "Esqueci" link
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onForgotPassword) {
@@ -205,7 +205,7 @@ Column(
             }
         }
         Spacer(8.dp)
-        
+
         // Entrar
         Button(
             onClick = onLogin,
@@ -216,7 +216,7 @@ Column(
             Text("Entrar", fontSize = 15.sp, fontWeight = FontWeight.Bold)
         }
         Spacer(12.dp)
-        
+
         // Biometria
         OutlinedButton(
             onClick = onBiometric,
@@ -229,7 +229,7 @@ Column(
             Text("Entrar com biometria", color = MaterialTheme.colorScheme.primary, fontSize = 15.sp)
         }
         Spacer(24.dp)
-        
+
         // Divisor
         Row(verticalAlignment = Alignment.CenterVertically) {
             Divider(Modifier.weight(1f), color = Color(0xFF6B7280).copy(alpha = 0.25f))
@@ -237,7 +237,7 @@ Column(
             Divider(Modifier.weight(1f), color = Color(0xFF6B7280).copy(alpha = 0.25f))
         }
         Spacer(18.dp)
-        
+
         // Cadastro link
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Text("Ainda não tem conta? ", color = colorOnSurface, fontSize = 13.sp)
@@ -268,7 +268,7 @@ VStack(spacing: 0) {
         BrandLogoSmall(theme: brandTheme)
     }
     .frame(height: 64)
-    
+
     // Body
     ScrollView {
         VStack(alignment: .leading, spacing: 0) {
@@ -276,21 +276,21 @@ VStack(spacing: 0) {
                 .font(brandTheme.font(size: 24, weight: .bold))
                 .foregroundColor(brandTheme.onBackground)
                 .padding(.top, 32)
-            
+
             Text("Entre com seu CPF e senha")
                 .font(brandTheme.font(size: 13))
                 .foregroundColor(brandTheme.onSurface)
                 .padding(.top, 4)
                 .padding(.bottom, 24)
-            
+
             FieldLabel("CPF")
             BrandTextField(text: $cpf, placeholder: "000.000.000-00",
                            trailingIcon: "keyboard.badge.eye")
                 .padding(.bottom, 16)
-            
+
             FieldLabel("Senha")
             BrandSecureField(text: $password)
-            
+
             HStack {
                 Spacer()
                 Button("Esqueci minha senha") { onForgotPassword() }
@@ -298,7 +298,7 @@ VStack(spacing: 0) {
                     .foregroundColor(brandTheme.primary)
             }
             .padding(.bottom, 32)
-            
+
             // Entrar
             Button(action: onLogin) {
                 Text("Entrar")
@@ -311,7 +311,7 @@ VStack(spacing: 0) {
             .cornerRadius(brandTheme.cornerRadius)
             .disabled(!isFormValid)
             .padding(.bottom, 12)
-            
+
             // Biometria
             Button(action: onBiometric) {
                 HStack(spacing: 8) {
@@ -329,7 +329,7 @@ VStack(spacing: 0) {
                 )
             }
             .padding(.bottom, 24)
-            
+
             // Divisor e link de cadastro...
         }
         .padding(.horizontal, 24)
@@ -343,16 +343,16 @@ VStack(spacing: 0) {
 
 ## Checklist de Ajuste
 
-- [ ] Header 64dp com `colorPrimary`, BrandLogo centralizado  
-- [ ] `colorBackground` aplicado no corpo  
-- [ ] Título 24sp bold com fonte da marca, letter-spacing -0.48  
-- [ ] Subtítulo 13sp `colorOnSurface`, gap 24dp abaixo  
-- [ ] Inputs com height 48dp, radius `borderRadiusDp`, border 1dp  
-- [ ] Ícones de mask e eye 16×16dp, 15dp da borda direita  
-- [ ] Labels de campo 12sp semibold `colorOnBackground`  
-- [ ] Link "Esqueci" 12sp medium `colorPrimary` alinhado à direita  
-- [ ] Gap de 32dp após campo senha antes do botão  
-- [ ] Botão "Entrar" 52dp, radius, estado disabled (cinza opacity 30%)  
-- [ ] Botão "Biometria" 52dp, border 1dp `colorPrimary`, ícone 18dp  
-- [ ] Divisor "ou" com linhas `rgba(107,114,128,0.25)`  
-- [ ] Link de cadastro centralizado, "Abra a sua grátis" em `colorPrimary`  
+- [ ] Header 64dp com `colorPrimary`, BrandLogo centralizado
+- [ ] `colorBackground` aplicado no corpo
+- [ ] Título 24sp bold com fonte da marca, letter-spacing -0.48
+- [ ] Subtítulo 13sp `colorOnSurface`, gap 24dp abaixo
+- [ ] Inputs com height 48dp, radius `borderRadiusDp`, border 1dp
+- [ ] Ícones de mask e eye 16×16dp, 15dp da borda direita
+- [ ] Labels de campo 12sp semibold `colorOnBackground`
+- [ ] Link "Esqueci" 12sp medium `colorPrimary` alinhado à direita
+- [ ] Gap de 32dp após campo senha antes do botão
+- [ ] Botão "Entrar" 52dp, radius, estado disabled (cinza opacity 30%)
+- [ ] Botão "Biometria" 52dp, border 1dp `colorPrimary`, ícone 18dp
+- [ ] Divisor "ou" com linhas `rgba(107,114,128,0.25)`
+- [ ] Link de cadastro centralizado, "Abra a sua grátis" em `colorPrimary`

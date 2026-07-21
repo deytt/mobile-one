@@ -64,8 +64,7 @@ class CurrencyFormatterTest {
 
     @Test
     fun deveFormatarEpochDayComoData() {
-        // epochDay 20000 = 2024-10-04 (aproximadamente)
-        // Vamos usar um epochDay conhecido: 19570 = 2023-07-15
+        // Usa um epochDay conhecido para validar formatação determinística.
         val knownDay = 19557 // 2023-07-02
         val today = 20000
         val result = CurrencyFormatter.formatEpochDay(epochDay = knownDay, todayEpochDay = today)

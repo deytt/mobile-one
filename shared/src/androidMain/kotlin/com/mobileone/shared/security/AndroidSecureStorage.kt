@@ -8,8 +8,7 @@ import androidx.security.crypto.MasterKey
 /**
  * Persistência segura via `EncryptedSharedPreferences` + Android Keystore (ADR-005).
  * `EncryptedSharedPreferences` foi descontinuada na `security-crypto` 1.1.0 em favor de
- * DataStore + Tink, mas é mantida aqui pela simplicidade — suficiente para esta POC; uma
- * migração para DataStore+Tink pode ser avaliada em um ADR futuro.
+ * DataStore + Tink. Uma migração pode ser avaliada em ADR futuro.
  */
 class AndroidSecureStorage(private val context: Context) : SecureStorage {
 

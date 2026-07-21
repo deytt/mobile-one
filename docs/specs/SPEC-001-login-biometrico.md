@@ -1,25 +1,22 @@
 # SPEC-001: Login com Autenticação Biométrica
 
-**Status:** Aprovado  
-**Versão:** 1.0  
-**Data:** 2026-07-17  
-**Feature owner:** Time Mobile  
-**Figma:**
-- Login: [`29:20015`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20015&m=dev)
-- Biometria: [`29:20689`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20689&m=dev)
-- Splash: [`28:19512`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=28-19512&m=dev)
+**Status:** Aprovado
+**Versão:** 1.0
+**Data:** 2026-07-17
+**Feature owner:** Time Mobile
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Implementar o fluxo de autenticação do usuário com suporte a senha e biometria (impressão digital / Face ID), demonstrando que regras de negócio complexas de autenticação bancária podem ser compartilhadas entre Android e iOS via KMP.
+Implementar o fluxo de autenticação do usuário com suporte a senha e biometria (impressão digital / Face ID), mantendo regras de negócio de autenticação bancária compartilhadas entre Android e iOS via KMP.
 
 ---
 
-## Escopo da POC
+## Escopo da feature
 
-Esta feature demonstra especificamente:
+Esta feature valida os seguintes aspectos técnicos:
 - ✅ Use case de autenticação rodando em Kotlin compartilhado
 - ✅ Biometria via `expect/actual` (implementação nativa, lógica compartilhada)
 - ✅ Armazenamento seguro de sessão via `SecureStorage` (expect/actual)
@@ -140,7 +137,7 @@ interface AuthRepository {
 | Campo CPF | Máscara `###.###.###-##`, teclado numérico |
 | Campo Senha | Ocultado por padrão, botão de reveal |
 | Botão entrar | Desabilitado se campos inválidos |
-| Link "Esqueci minha senha" | Fora do escopo da POC |
+| Link "Esqueci minha senha" | Fora do escopo desta feature |
 | Botão biometria | Exibido apenas se `isBiometricEnabled == true` |
 
 ### Tela 2: Boas-vindas com Biometria
@@ -169,7 +166,7 @@ class LoginWithCredentialsUseCaseTest {
 
 ---
 
-## Critérios de aceite da POC
+## Critérios de aceite
 
 - [ ] Login com CPF + senha funciona em Android e iOS usando o mesmo use case
 - [ ] Biometria funciona no Android (fingerprint) e iOS (Face ID) com lógica de tentativas no shared

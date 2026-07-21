@@ -7,11 +7,11 @@ alwaysApply: true
 
 ## O que é este projeto
 
-**mobile-one** é uma POC (Proof of Concept) criada para demonstrar aos gestores de um banco que existe uma alternativa técnica sólida ao React Native para construção de um aplicativo bancário cross-platform e white-label.
+**mobile-one** é uma prova de conceito técnica para avaliar Kotlin Multiplatform com UI nativa na construção de um aplicativo bancário cross-platform e white-label.
 
 ## Motivação
 
-Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/Swift) para React Native. O time de desenvolvimento — composto por especialistas Android e iOS — criou esta POC para demonstrar que é possível:
+A avaliação técnica compara alternativas cross-platform e valida a arquitetura KMP com UI nativa para os seguintes objetivos:
 
 - Compartilhar **70–80% do código** (camadas de dados e domínio via KMP)
 - Manter **UI 100% nativa** (Compose no Android, SwiftUI no iOS)
@@ -19,11 +19,11 @@ Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/
 - Entregar **performance nativa total** sem bridges JavaScript
 - Construir uma arquitetura **white-label** real
 
-## Público-alvo da POC
+## Público-alvo da documentação
 
-- Gestores não-técnicos → precisam ver métricas, comparativos e uma feature funcionando
-- Arquitetos de software do banco → precisam ver os ADRs e as specs de interface
-- Time de desenvolvimento → precisam ver que a curva de aprendizado é gerenciável
+- Arquitetura de software → ADRs, contratos e critérios técnicos
+- Engenharia mobile → specs, setup e padrões de implementação
+- Produto e qualidade → evidências funcionais, métricas e fluxos validados
 
 ## Stack decidida
 
@@ -41,11 +41,11 @@ Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/
 
 > *"One codebase. Native experience."*
 
-## Status atual da POC
+## Status atual
 
 | Entregável | Status |
 |---|---|
-| Documentação (ADRs, Specs, Pitch) | ✅ Concluído |
+| Documentação (ADRs, specs e Confluence) | ✅ Concluído |
 | Design System Figma (3 marcas, 7 telas) | ✅ Concluído |
 | Setup KMP (shared, androidApp, iosApp) | 🔄 Em andamento |
 | UI Android (Compose) | ⏳ Aguardando setup |
@@ -53,18 +53,6 @@ Os gestores decidiram (top-down) migrar dois apps nativos (Android/Kotlin e iOS/
 
 ## Figma → Código
 
-**Arquivo:** `Mobile-One` — fileKey: `i0v5vLAdG0PMWZ6bYwUb0h`
+**Arquivo corporativo:** preencher `docs/figma/design-system.md` com o file key e os node IDs oficiais.
 
-As telas foram criadas no Figma Make com sistema de tokens de cor. Sempre usar `get_design_context` via MCP do Figma antes de implementar qualquer tela. Antes de chamar `get_design_context`, ler a skill `figma-design-to-code`.
-
-### Mapa de nós por tela
-
-| Tela | node-id | URL |
-|---|---|---|
-| Splash | `28:19512` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=28-19512) |
-| Login | `29:20015` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20015) |
-| Biometria | `29:20689` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-20689) |
-| Home / Conta | `29:21243` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-21243) |
-| Cartões | `29:22301` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-22301) |
-| Brand Switcher | `29:23293` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-23293) |
-| Fluxo PIX | `15:9848` | [abrir](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=15-9848) |
+Sempre usar `get_design_context` via MCP do Figma antes de implementar qualquer tela. Antes de chamar `get_design_context`, ler a skill `figma-design-to-code`.

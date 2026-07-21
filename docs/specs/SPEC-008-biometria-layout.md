@@ -1,8 +1,8 @@
 # SPEC-008 — Biometria Screen: Ajuste de Layout e Flavor
 
-**Status:** Pronto para implementação  
-**Tipo:** Layout / Brand  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-6148) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-6315) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-6473)
+**Status:** Pronto para implementação
+**Tipo:** Layout / Brand
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
@@ -130,7 +130,7 @@ Estrutura em camadas:
 2. **Halo biometria**: dois `Box` sobrepostos — halo 72dp circle opacity 10% + ícone 52dp
 3. **Espaçador flexível**: `Spacer(modifier = Modifier.weight(1f))` entre botão e link
 4. **Link underline**: `TextDecoration.Underline` no estilo do texto
-5. **padding-bottom**: 48dp entre subtítulo e botão biometria (não usar hardcoded padding na tela antiga)
+5. **padding-bottom**: 48dp entre subtítulo e botão biometria (não usar padding hardcoded)
 
 ```kotlin
 Column(
@@ -140,7 +140,7 @@ Column(
     horizontalAlignment = Alignment.CenterHorizontally
 ) {
     // StatusBar + Header (ver SPEC-007)
-    
+
     // Body
     Column(
         modifier = Modifier
@@ -169,7 +169,7 @@ Column(
             )
         }
         Spacer(16.dp)
-        
+
         Text(
             text = "Olá, $userName!",
             fontSize = 22.sp,
@@ -178,7 +178,7 @@ Column(
             letterSpacing = (-0.44).sp
         )
         Spacer(8.dp)
-        
+
         Text(
             text = "Confirme sua identidade para acessar sua conta",
             fontSize = 13.sp,
@@ -188,7 +188,7 @@ Column(
             lineHeight = 17.875.sp
         )
         Spacer(48.dp)
-        
+
         // Biometric Button
         Box(
             modifier = Modifier
@@ -212,16 +212,16 @@ Column(
             )
         }
         Spacer(12.dp)
-        
+
         Text(
             text = "Toque para usar biometria",
             fontSize = 13.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.primary
         )
-        
+
         Spacer(modifier = Modifier.weight(1f))
-        
+
         // Link
         Text(
             text = "Usar CPF e senha",
@@ -250,7 +250,7 @@ Column(
 ```swift
 VStack(spacing: 0) {
     // StatusBar + Header (ver SPEC-007)
-    
+
     // Body
     VStack(spacing: 0) {
         // Avatar
@@ -259,20 +259,20 @@ VStack(spacing: 0) {
                 .fill(brandTheme.primary)
                 .frame(width: 72, height: 72)
                 .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 4)
-            
+
             Text(userInitials)
                 .font(brandTheme.font(size: 22, weight: .bold))
                 .foregroundColor(.white)
                 .tracking(-0.44)
         }
         .padding(.bottom, 16)
-        
+
         Text("Olá, \(userName)!")
             .font(brandTheme.font(size: 22, weight: .bold))
             .foregroundColor(brandTheme.onBackground)
             .tracking(-0.44)
             .padding(.bottom, 8)
-        
+
         Text("Confirme sua identidade para acessar sua conta")
             .font(brandTheme.font(size: 13))
             .foregroundColor(brandTheme.onSurface)
@@ -280,14 +280,14 @@ VStack(spacing: 0) {
             .frame(maxWidth: 220)
             .lineSpacing(4.875)
             .padding(.bottom, 48)
-        
+
         // Biometric Button
         Button(action: onBiometricTap) {
             ZStack {
                 Circle()
                     .fill(brandTheme.primary.opacity(0.10))
                     .frame(width: 72, height: 72)
-                
+
                 Image(systemName: "touchid")
                     .resizable()
                     .frame(width: 52, height: 52)
@@ -296,13 +296,13 @@ VStack(spacing: 0) {
             .frame(width: 96, height: 96)
         }
         .padding(.bottom, 12)
-        
+
         Text("Toque para usar biometria")
             .font(brandTheme.font(size: 13, weight: .medium))
             .foregroundColor(brandTheme.primary)
-        
+
         Spacer()
-        
+
         Button("Usar CPF e senha") { onUseCpf() }
             .font(brandTheme.font(size: 13, weight: .medium))
             .foregroundColor(brandTheme.onSurface)
@@ -321,16 +321,16 @@ VStack(spacing: 0) {
 
 ## Checklist de Ajuste
 
-- [ ] Header 64dp com `colorPrimary`, igual ao Login  
-- [ ] `colorBackground` no corpo  
-- [ ] Avatar 72dp circular, `colorPrimary` de fundo, sombra  
-- [ ] Iniciais do usuário em branco, fonte da marca, 22sp bold  
-- [ ] Saudação "Olá, {nome}!" 22sp bold, letter-spacing -0.44  
-- [ ] Subtítulo 13sp, max-width 220dp, centralizado  
-- [ ] Gap de 48dp antes do botão biometria  
-- [ ] Halo 72dp círculo `colorPrimary opacity 10%` centralizado no container 96dp  
-- [ ] Ícone fingerprint 52dp, tint `colorPrimary`  
-- [ ] "Toque para usar biometria" 13sp medium `colorPrimary`  
-- [ ] Espaçador flexível empurra link para rodapé  
-- [ ] "Usar CPF e senha" 13sp medium `colorOnSurface` underline  
-- [ ] padding-bottom 32dp no rodapé  
+- [ ] Header 64dp com `colorPrimary`, igual ao Login
+- [ ] `colorBackground` no corpo
+- [ ] Avatar 72dp circular, `colorPrimary` de fundo, sombra
+- [ ] Iniciais do usuário em branco, fonte da marca, 22sp bold
+- [ ] Saudação "Olá, {nome}!" 22sp bold, letter-spacing -0.44
+- [ ] Subtítulo 13sp, max-width 220dp, centralizado
+- [ ] Gap de 48dp antes do botão biometria
+- [ ] Halo 72dp círculo `colorPrimary opacity 10%` centralizado no container 96dp
+- [ ] Ícone fingerprint 52dp, tint `colorPrimary`
+- [ ] "Toque para usar biometria" 13sp medium `colorPrimary`
+- [ ] Espaçador flexível empurra link para rodapé
+- [ ] "Usar CPF e senha" 13sp medium `colorOnSurface` underline
+- [ ] padding-bottom 32dp no rodapé

@@ -4,9 +4,8 @@ import kotlinx.coroutines.delay
 
 /**
  * Scanner de QR Code para iOS (SPEC-003).
- * POC: retorna payload EMV fixo para demonstrar o parsing no shared sem depender de câmera real.
- * Produção: substituir por integração com AVFoundation + AVCaptureSession, apresentando
- * um UIViewController de câmera e devolvendo o payload via continuation.
+ * A implementação atual retorna um payload EMV fixo para validar o parser compartilhado.
+ * A integração com câmera deve usar AVFoundation + AVCaptureSession.
  */
 class IosQRCodeScanner : QRCodeScanner {
 

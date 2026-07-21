@@ -13,9 +13,9 @@ import com.mobileone.shared.domain.usecase.ToggleBalanceVisibilityUseCase
 import org.koin.dsl.module
 
 /**
- * Bindings de Home/Extrato (SPEC-002). Usa fakes para a POC; em produção substituir por
- * implementações reais (SQLDelight + Ktor). `PreferencesRepositoryImpl` usa `SecureStorage`
- * já registrado em [securityPlatformModule].
+ * Bindings de Home/Extrato (SPEC-002). As implementações em memória devem ser substituídas
+ * por integrações SQLDelight + Ktor. `PreferencesRepositoryImpl` usa `SecureStorage`
+ * registrado em [securityPlatformModule].
  */
 val homeModule = module {
     single<AccountRepository> { FakeAccountRepository() }

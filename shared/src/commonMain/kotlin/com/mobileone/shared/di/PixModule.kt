@@ -11,8 +11,8 @@ import com.mobileone.shared.feature.pix.PixLimitsValidator
 import org.koin.dsl.module
 
 /**
- * Bindings do fluxo PIX (SPEC-003). Usa fake para a POC; em produção substituir por
- * [PixRepositoryImpl] que chama o DICT via Ktor. [ExecutePixTransferUseCase] já recebe
+ * Bindings do fluxo PIX (SPEC-003). A implementação em memória deve ser substituída por
+ * [PixRepositoryImpl] integrado ao DICT via Ktor. [ExecutePixTransferUseCase] recebe
  * [BiometricAuthenticator] e [PixLimitsValidator] registrados neste módulo.
  */
 val pixModule = module {

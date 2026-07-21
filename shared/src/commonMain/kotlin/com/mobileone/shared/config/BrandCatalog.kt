@@ -1,15 +1,12 @@
 package com.mobileone.shared.config
 
 /**
- * Catálogo das 3 marcas da POC (SPEC-004 / SPEC-005). Os tokens de [ThemeTokens] seguem a
- * tabela da SPEC-005 (extraída do Figma). `colorPrimaryVariant` não tem token próprio no
- * Figma ainda; usamos o mesmo valor de `colorPrimary` como placeholder até existir um tom
- * de variante definido.
+ * Catálogo inicial de marcas (SPEC-004 / SPEC-005). Os tokens de [ThemeTokens] seguem a
+ * tabela da SPEC-005. `colorPrimaryVariant` reutiliza `colorPrimary` até existir um token
+ * específico de variante.
  *
- * Nesta fundação (SPEC-004) as marcas são factories Kotlin em memória, sem I/O de plataforma.
- * O carregamento a partir de JSON bundled (um arquivo por marca em `resources/white_label`,
- * conforme descrito na spec) fica para uma spec/PR futura, quando a tela de Brand Switcher
- * precisar de fato trocar de configuração em runtime a partir de um arquivo.
+ * As marcas são factories Kotlin em memória, sem I/O de plataforma. O carregamento a partir
+ * de JSON bundled ou configuração remota deve ser definido em spec incremental.
  */
 object BrandCatalog {
 

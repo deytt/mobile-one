@@ -1,26 +1,24 @@
-# SPEC-004: Demonstração White-Label
+# SPEC-004: Configuração White-Label
 
-**Status:** Aprovado  
-**Versão:** 1.0  
-**Data:** 2026-07-17  
-**Feature owner:** Time Mobile  
-**Figma:**
-- Brand Switcher (Dev Mode): [`29:23293`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-23293&m=dev)
-- Design System (tokens das 3 marcas): [`docs/figma/design-system.md`](../figma/design-system.md)
+**Status:** Aprovado
+**Versão:** 1.0
+**Data:** 2026-07-17
+**Feature owner:** Time Mobile
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Demonstrar de forma visual e técnica que a arquitetura KMP suporta white-label — a capacidade de o mesmo app aparecer com identidades visuais e conjuntos de features diferentes, sem alterar uma linha de código de UI ou lógica de negócio.
+Definir a configuração white-label compartilhada para que o mesmo app possa operar com identidades visuais e conjuntos de features diferentes, sem bifurcar código de UI ou regras de negócio.
 
-Esta spec é especialmente pensada para a apresentação aos gestores: o demonstrador troca a configuração ao vivo, e o app muda completamente de aparência em segundos.
+A tela de validação interna permite alternar a configuração ativa em tempo de execução para verificar a aplicação dos tokens em Android e iOS.
 
 ---
 
-## Escopo da demonstração
+## Escopo da feature
 
-A POC incluirá **3 configurações de marca** pré-criadas:
+A implementação inicial contempla **3 configurações de marca** pré-criadas:
 
 | Marca | Cor Primária | Cor Secundária | Features ativas |
 |---|---|---|---|
@@ -96,7 +94,7 @@ interface WhiteLabelConfigRepository {
     fun observeConfig(): Flow<WhiteLabelConfig>
 }
 
-// Implementação para a POC: carrega de JSON bundled no assets
+// Implementação inicial: carrega de JSON bundled nos assets
 class BundledWhiteLabelConfigRepository : WhiteLabelConfigRepository {
     override suspend fun loadConfig(brandId: String): Result<WhiteLabelConfig> {
         val json = loadJsonAsset("white_label/$brandId.json")
@@ -205,21 +203,21 @@ struct HomeQuickActions: View {
 
 ---
 
-## Tela de demonstração (exclusiva da POC)
+## Tela interna de validação
 
-Para a apresentação aos gestores, a POC incluirá uma **tela de Developer Mode** (oculta em produção) que permite trocar a configuração de marca ao vivo:
+A aplicação inclui uma **tela de Developer Mode** restrita a builds internos para alternar a configuração de marca em tempo de execução:
 
 ```
-[Dev Mode — Brand Switcher]
+[Tela interna — Brand Switcher]
 
 ○ Banco Principal     [Preview: azul naval + laranja]
-○ Fintech Verde       [Preview: verde + azul escuro]  
+○ Fintech Verde       [Preview: verde + azul escuro]
 ○ Banco Premium       [Preview: vermelho + dourado]
 
 [Aplicar] → app reinicia com nova configuração instantaneamente
 ```
 
-Esta tela demonstra o white-label de forma visceral para gestores não-técnicos.
+Esta tela facilita a validação técnica da configuração white-label nas duas plataformas.
 
 ---
 
@@ -235,7 +233,7 @@ shared/commonMain/resources/
 
 ---
 
-## Critérios de aceite da POC
+## Critérios de aceite
 
 - [ ] Trocar de marca muda cores, bordas e nome do banco em toda a UI
 - [ ] Feature flags ocultam/exibem botões de ação corretamente

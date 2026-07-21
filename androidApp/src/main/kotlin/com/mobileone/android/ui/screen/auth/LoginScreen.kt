@@ -95,7 +95,7 @@ fun LoginContent(
     onRegisterClick: () -> Unit = {},
     onDismissError: () -> Unit = {}
 ) {
-    // Pré-preenchido com credenciais de demo (POC) para agilizar o desenvolvimento.
+    // Valores iniciais para execução local com repositório em memória.
     var cpf by remember { mutableStateOf(maskCpf(FakeAuthRepository.DEMO_CPF)) }
     var password by remember { mutableStateOf(FakeAuthRepository.DEMO_PASSWORD) }
     var passwordVisible by remember { mutableStateOf(false) }

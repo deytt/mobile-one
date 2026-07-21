@@ -6,9 +6,8 @@ import com.mobileone.shared.domain.error.asFailure
 import com.mobileone.shared.domain.repository.AuthRepository
 
 /**
- * Implementação em memória de [AuthRepository] para a POC (SPEC-001) — não há backend real.
- * Credenciais fixas de demonstração; [NETWORK_ERROR_CPF] simula indisponibilidade de rede para
- * validar esse caminho de erro sem precisar de um servidor.
+ * Implementação em memória de [AuthRepository] para validação local da SPEC-001.
+ * [NETWORK_ERROR_CPF] mantém um caminho determinístico para validar erro de rede.
  */
 class FakeAuthRepository : AuthRepository {
 
@@ -45,12 +44,12 @@ class FakeAuthRepository : AuthRepository {
     }
 
     companion object {
-        /** CPF válido de demonstração (checksum correto, não pertence a pessoa real). */
+        /** CPF válido para execução local; checksum correto e sem vínculo com pessoa real. */
         const val DEMO_CPF = "76109277673"
         const val DEMO_PASSWORD = "111111"
         const val DEMO_USER_NAME = "Heitor Bastos"
 
-        /** CPF válido de demonstração reservado para simular `AuthDomainError.NetworkError`. */
+        /** CPF válido reservado para retornar `AuthDomainError.NetworkError`. */
         const val NETWORK_ERROR_CPF = "11144477735"
     }
 }

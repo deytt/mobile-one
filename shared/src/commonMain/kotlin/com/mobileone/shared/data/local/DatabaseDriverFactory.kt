@@ -3,8 +3,8 @@ package com.mobileone.shared.data.local
 import app.cash.sqldelight.db.SqlDriver
 
 /**
- * Placeholder expect/actual para validar que o driver SQLDelight (ADR-002) compila e
- * instancia nas duas plataformas. O schema real de negócio entra com a SPEC-002.
+ * Factory expect/actual do driver SQLDelight (ADR-002).
+ * O schema de negócio é definido nas specs de dados correspondentes.
  */
 expect class DatabaseDriverFactory {
     fun createDriver(): SqlDriver

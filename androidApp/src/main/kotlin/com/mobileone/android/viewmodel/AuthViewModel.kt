@@ -101,7 +101,7 @@ class AuthViewModel(
         _uiState.update { it.copy(error = null) }
     }
 
-    /** Encerra a sessão local (botão "Sair" da Home placeholder). */
+    /** Encerra a sessão local. */
     fun onLogoutClick() {
         viewModelScope.launch {
             sessionRepository.endSession()

@@ -1,8 +1,8 @@
 # SPEC-006 — Splash Screen: Ajuste de Layout e Flavor
 
-**Status:** Pronto para implementação  
-**Tipo:** Layout / Brand  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-5656) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-5806) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-5947)
+**Status:** Pronto para implementação
+**Tipo:** Layout / Brand
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
@@ -114,7 +114,7 @@ Box(
         .background(brush = brandRadialGradient(config))
 ) {
     // Status bar area
-    
+
     // Centro
     Column(
         modifier = Modifier
@@ -127,7 +127,7 @@ Box(
         Spacer(16.dp)
         Text(config.brandName, style = brandTextStyle(22.sp, fontWeight = SemiBold))
     }
-    
+
     // Rodapé
     Column(
         horizontalAlignment = CenterHorizontally,
@@ -168,10 +168,10 @@ ZStack {
     // Background
     brandTheme.splashGradient
         .ignoresSafeArea()
-    
+
     VStack(spacing: 0) {
         Spacer()
-        
+
         // Logo + Name
         VStack(spacing: 16) {
             BrandLogoView(size: 64, theme: brandTheme)
@@ -180,9 +180,9 @@ ZStack {
                 .foregroundColor(.white)
                 .tracking(brandTheme.splashNameTracking)
         }
-        
+
         Spacer()
-        
+
         // Rodapé
         VStack(spacing: 12) {
             SplashPageDots()
@@ -203,11 +203,11 @@ ZStack {
 ## Checklist de Ajuste
 
 - [ ] Background radial gradient implementado (Android: `Brush.radialGradient`, iOS: `RadialGradient`)
-- [ ] Gradiente com os stops corretos por marca  
-- [ ] BrandLogo 64dp com shape correto por marca  
-- [ ] Fonte e letter-spacing aplicados por marca  
-- [ ] Page dots (3 bolinhas) com tamanho e opacidade crescentes  
-- [ ] Texto regulatório 10sp, rgba(255,255,255,0.45)  
-- [ ] Padding rodapé: 40dp bottom  
-- [ ] Status bar: transparente, ícones brancos  
+- [ ] Gradiente com os stops corretos por marca
+- [ ] BrandLogo 64dp com shape correto por marca
+- [ ] Fonte e letter-spacing aplicados por marca
+- [ ] Page dots (3 bolinhas) com tamanho e opacidade crescentes
+- [ ] Texto regulatório 10sp, rgba(255,255,255,0.45)
+- [ ] Padding rodapé: 40dp bottom
+- [ ] Status bar: transparente, ícones brancos
 

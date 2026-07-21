@@ -65,9 +65,9 @@ actual class BiometricAuthenticator {
 
 ## White-label
 
-A configuração white-label fica em `shared/commonMain/config/WhiteLabelConfig.kt`. Os tokens abaixo são extraídos diretamente do Figma (fileKey: `i0v5vLAdG0PMWZ6bYwUb0h`) e devem ser usados como valores de referência no código.
+A configuração white-label fica em `shared/commonMain/config/WhiteLabelConfig.kt`. Os tokens abaixo são os valores de referência implementados no código; atualizar `docs/figma/design-system.md` quando o Figma corporativo for definido.
 
-### Tokens das 3 marcas da POC
+### Tokens das 3 marcas de referência
 
 | Token | Banco Principal | Fintech Verde | Banco Premium |
 |---|---|---|---|

@@ -28,7 +28,7 @@ struct LoginContent: View {
     var onDismissError: () -> Void = {}
     var onRegisterTap: () -> Void = {}
 
-    // Pré-preenchido com credenciais de demo (POC) para agilizar o desenvolvimento.
+    // Valores iniciais para execução local com repositório em memória.
     @State private var cpf = Self.maskCpf(FakeAuthRepository.companion.DEMO_CPF)
     @State private var password = FakeAuthRepository.companion.DEMO_PASSWORD
     @State private var passwordVisible = false

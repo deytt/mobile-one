@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 /**
- * Repositório de transações falso para a POC (SPEC-002). Simula paginação de 20 itens/página.
+ * Implementação em memória de [TransactionRepository] para validar paginação da SPEC-002.
  */
 class FakeTransactionRepository : TransactionRepository {
 
@@ -35,7 +35,7 @@ class FakeTransactionRepository : TransactionRepository {
         flowOf(ALL_TRANSACTIONS.take(limit))
 
     companion object {
-        // epochDay 20000 ≈ 2024-10-04; decrementamos para simular dias recentes
+        // Base fixa para manter dados previsíveis em testes e previews.
         private const val TODAY_EPOCH_DAY = 20000
 
         val ALL_TRANSACTIONS: List<Transaction> = listOf(

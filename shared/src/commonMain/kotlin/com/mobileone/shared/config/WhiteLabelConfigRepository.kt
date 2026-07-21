@@ -19,8 +19,8 @@ interface WhiteLabelConfigRepository {
 }
 
 /**
- * Implementação da fundação (SPEC-004): resolve a configuração a partir do [BrandCatalog],
- * mantido em memória. Ver TODO no [BrandCatalog] sobre a futura migração para JSON bundled.
+ * Implementação inicial da SPEC-004: resolve a configuração a partir do [BrandCatalog],
+ * mantido em memória até a adoção de configuração bundled ou remota.
  */
 class InMemoryWhiteLabelConfigRepository : WhiteLabelConfigRepository {
 

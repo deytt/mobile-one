@@ -1,14 +1,14 @@
 # SPEC-010 — Home de Conta: Ajuste de Layout e Flavor
 
-**Status:** Implementado  
-**Tipo:** Layout / Brand  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-656) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-991) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-1332)
+**Status:** Implementado
+**Tipo:** Layout / Brand
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Corrigir o layout da Home de Conta para que reflita fielmente o design do Figma, com suporte aos 3 flavors. Compartilha o mesmo **Bottom Tab Bar** da Home de Cartões (ver SPEC-009). Sem novas funcionalidades — apenas ajustes visuais.
+Padronizar o layout da Home de Conta conforme a referência visual corporativa, com suporte às configurações de marca. Compartilha o mesmo **Bottom Tab Bar** da Home de Cartões (ver SPEC-009).
 
 ---
 
@@ -19,7 +19,7 @@ Corrigir o layout da Home de Conta para que reflita fielmente o design do Figma,
 │  StatusBar (colorPrimary)             │
 ├──────────────────────────────────────┤
 │  [Header]                             │
-│  Avatar  "Olá, Heitor"    [sino]      │
+│  Avatar  "Olá, {nome}"     [sino]      │
 │  (igual ao Home Cartões)              │
 ├──────────────────────────────────────┤
 │  [Card Saldo — bg colorPrimary]       │
@@ -37,11 +37,11 @@ Corrigir o layout da Home de Conta para que reflita fielmente o design do Figma,
 ├──────────────────────────────────────┤
 │  Transações recentes    [Ver todas]   │
 │  ┌─────────────────────────────────┐  │
-│  │ [►] Netflix        R$ 45,90     │  │
+│  │ [►] Assinatura     R$ 45,90     │  │
 │  │ [🛒] Supermercado  R$ 234,50    │  │
-│  │ [⚡] PIX-João     +R$ 500,00    │  │ verde
+│  │ [⚡] PIX recebido +R$ 500,00    │  │ verde
 │  │ [💊] Farmácia      R$ 67,80     │  │
-│  │ [🚗] Uber          R$ 28,50     │  │
+│  │ [🚗] Transporte    R$ 28,50     │  │
 │  └─────────────────────────────────┘  │
 ├──────────────────────────────────────┤
 │  [Cartões]  [Conta ●]     [⊞]        │ ← Bottom Bar
@@ -176,7 +176,7 @@ enum class HomeTab { CARTOES, CONTA }
 
 **Arquivo:** `androidApp/ui/screen/home/HomeContaScreen.kt`
 
-### Problemas a corrigir:
+### Pontos de implementação:
 1. **Hero Card de saldo**: fundo `colorPrimary` deve se integrar visualmente com o header (zero gap entre header e card)
 2. **Quick actions**: 3 botões circulares 48dp com background semitransparente, não usar ícones de system
 3. **Feature cards**: shadow sutil, border-radius da marca, ícone `colorPrimary`
@@ -204,7 +204,7 @@ fun HomeContaScreen(
         LazyColumn(contentPadding = padding) {
             // Header
             item { HomeHeader(config) }
-            
+
             // Hero Card Saldo
             item {
                 HeroCardSaldo(
@@ -217,11 +217,11 @@ fun HomeContaScreen(
                     config = config
                 )
             }
-            
+
             // Feature Cards
             item { FeatureCard(type = FeatureType.PIX, config = config) }
             item { FeatureCard(type = FeatureType.OPEN_FINANCE, config = config) }
-            
+
             // Transações
             item { SectionHeader("Transações recentes", onVerTodas = { /* nav */ }, config = config) }
             items(viewModel.transactions) { transaction ->
@@ -238,7 +238,7 @@ fun HomeContaScreen(
 
 **Arquivo:** `iosApp/Views/Home/HomeContaView.swift`
 
-### Problemas a corrigir:
+### Pontos de implementação:
 1. **Hero Card**: `ZStack` com `colorPrimary.ignoresSafeArea(edges: .top)` para continuidade visual com status bar
 2. **Quick actions**: `HStack` com `Circle().fill(.white.opacity(0.15))` + ícones SF Symbols
 3. **Saldo toggle**: `@State var isSaldoVisible` + ícone eye/eye.slash
@@ -250,35 +250,35 @@ struct HomeContaView: View {
     @Environment(\.brandTheme) var brandTheme
     let onNavigateToCartoes: () -> Void
     let onBrandSwitcher: () -> Void
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header + Hero Card com bg colorPrimary contíguo
             ZStack(alignment: .top) {
                 brandTheme.primary
                     .frame(height: 220) // status + header + card
-                
+
                 VStack(spacing: 0) {
                     HomeHeaderView(theme: brandTheme, userName: viewModel.userName)
                     HeroCardSaldoView(viewModel: viewModel, theme: brandTheme)
                 }
             }
-            
+
             ScrollView {
                 VStack(spacing: 16) {
                     FeatureCardView(type: .pix, theme: brandTheme)
                     FeatureCardView(type: .openFinance, theme: brandTheme)
-                    
+
                     SectionHeaderView(title: "Transações recentes",
                                       actionTitle: "Ver todas",
                                       theme: brandTheme)
-                    
+
                     TransactionListView(transactions: viewModel.transactions,
                                         theme: brandTheme)
                 }
                 .padding(.horizontal, 16)
             }
-            
+
             HomeTabBar(
                 currentTab: .constant(.conta),
                 onTabChange: { if $0 == .cartoes { onNavigateToCartoes() } },
@@ -294,15 +294,15 @@ struct HomeContaView: View {
 
 ## Checklist de Ajuste
 
-- [x] Status bar `colorPrimary`, header `colorPrimary` contínuos (sem separação)  
-- [x] "Saldo disponível" 13sp branco opacity 70%  
-- [x] Valor 28sp bold branco, ícone olho 20dp  
-- [x] 3 quick actions circulares 48dp, fundo `rgba(255,255,255,0.15)`  
-- [x] Labels das actions 12sp medium branco  
-- [x] Feature cards com shadow, border-radius da marca, ícone `colorPrimary`  
-- [x] Transação entrada com valor verde `#22C55E` e sinal "+"  
-- [x] "Ver todas" 13sp `colorPrimary`  
-- [ ] **NOVO** Bottom Bar com "Conta" ativa (pill preenchida `colorPrimary`)  
-- [ ] "Cartões" inativo navega para HomeCartoesScreen  
-- [ ] Botão grade abre BrandSwitcher  
-- [ ] Bottom bar respeita safe area inferior  
+- [x] Status bar `colorPrimary`, header `colorPrimary` contínuos (sem separação)
+- [x] "Saldo disponível" 13sp branco opacity 70%
+- [x] Valor 28sp bold branco, ícone olho 20dp
+- [x] 3 quick actions circulares 48dp, fundo `rgba(255,255,255,0.15)`
+- [x] Labels das actions 12sp medium branco
+- [x] Feature cards com shadow, border-radius da marca, ícone `colorPrimary`
+- [x] Transação entrada com valor verde `#22C55E` e sinal "+"
+- [x] "Ver todas" 13sp `colorPrimary`
+- [ ] **NOVO** Bottom Bar com "Conta" ativa (pill preenchida `colorPrimary`)
+- [ ] "Cartões" inativo navega para HomeCartoesScreen
+- [ ] Botão grade abre BrandSwitcher
+- [ ] Bottom bar respeita safe area inferior

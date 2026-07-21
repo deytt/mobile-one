@@ -8,16 +8,15 @@ import com.mobileone.shared.domain.repository.PixRepository
 import kotlinx.coroutines.delay
 
 /**
- * Implementação fake do [PixRepository] para a POC (SPEC-003).
- * Simula delay de rede e retorna destinatários mockados por chave.
- * Em produção, substituir por implementação real com Ktor chamando o DICT BCB.
+ * Implementação em memória de [PixRepository] para validação local da SPEC-003.
+ * Uma implementação integrada deve usar Ktor para consultar o DICT BCB.
  */
 class FakePixRepository : PixRepository {
 
     override suspend fun lookupRecipient(pixKey: String): Result<Recipient> {
-        delay(1_200)  // simula latência da consulta DICT
+        delay(1_200)
 
-        // Simula "chave não encontrada" para chaves que começam com "000"
+        // Mantém um caminho determinístico para validar o erro de destinatário inexistente.
         if (pixKey.trimStart('0').isEmpty() || pixKey.startsWith("000")) {
             return Result.failure(PixError.RecipientNotFound)
         }
@@ -27,7 +26,7 @@ class FakePixRepository : PixRepository {
     }
 
     override suspend fun executeTransfer(request: PixTransferRequest): Result<String> {
-        delay(2_000)  // simula processamento da transferência
+        delay(2_000)
 
         val e2eId = generateE2eId()
         return Result.success(e2eId)

@@ -1,9 +1,7 @@
 import SwiftUI
 import shared
 
-/// Tela placeholder da Fundação KMP — prova que o iosApp consome o `shared` via
-/// `greet()`/`Platform().name` e o tema white-label (SPEC-004) via `@Environment`. As telas
-/// reais (Login, Home, PIX, ...) chegam a partir do Figma por spec.
+/// Tela inicial usada para validar o consumo do `shared` e do tema white-label (SPEC-004).
 struct ContentView: View {
     @Environment(\.whiteLabelConfig) private var theme
     private let message = PlatformKt.greet()

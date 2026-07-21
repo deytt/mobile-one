@@ -1,19 +1,18 @@
 # SPEC-003: Transferência PIX
 
-**Status:** Aprovado  
-**Versão:** 1.0  
-**Data:** 2026-07-17  
-**Feature owner:** Time Mobile  
-**Figma:**
-- Fluxo PIX completo (8 telas): [`15:9848`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=15-9848&m=dev)
+**Status:** Aprovado
+**Versão:** 1.0
+**Data:** 2026-07-17
+**Feature owner:** Time Mobile
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Implementar o fluxo completo de transferência PIX — da inserção da chave até a confirmação com biometria — demonstrando que **regras de negócio complexas de Open Finance e regulatórias** ficam no shared KMP, reutilizadas identicamente entre Android e iOS.
+Implementar o fluxo completo de transferência PIX, da inserção da chave até a confirmação com biometria, mantendo regras de negócio e validações regulatórias no `shared` KMP para reutilização consistente entre Android e iOS.
 
-Esta é a feature de maior impacto para convencer gestores, pois demonstra:
+Esta feature valida os seguintes pontos técnicos:
 1. Validadores de chave PIX compartilhados (regra regulatória do Banco Central)
 2. Consulta ao diretório DICT do Banco Central via Ktor compartilhado
 3. Confirmação de transação com biometria (expect/actual)
@@ -236,7 +235,7 @@ class ParsePixQRCodeUseCaseTest {
 
 ---
 
-## Critérios de aceite da POC
+## Critérios de aceite
 
 - [ ] Validação de CPF/CNPJ/Email/Telefone/UUID funcionando em Android e iOS (mesmo código)
 - [ ] Consulta ao DICT retorna destinatário (mock ou sandbox do BCB)

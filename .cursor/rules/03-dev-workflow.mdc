@@ -48,7 +48,8 @@ Escopos: `shared`, `android`, `ios`, `docs`, `adr`, `spec`
 docs/
 ├── adr/          # Architecture Decision Records — decisões e argumentos
 ├── specs/        # Especificações de features e contratos de interface
-└── poc-pitch/    # Material de apresentação para gestores
+├── confluence/   # Páginas base para documentação corporativa
+└── figma/        # Referências de design corporativas
 ```
 
 ## Regras de qualidade
@@ -56,4 +57,4 @@ docs/
 - Todo use case em `shared` deve ter teste unitário que rode em ambas as plataformas
 - Nenhum `TODO` sem issue associada
 - PRs pequenos e focados — uma spec por PR
-- O percentual de código compartilhado deve ser medido e documentado no `poc-pitch`
+- O percentual de código compartilhado deve ser medido e documentado em `docs/confluence/` ou no relatório técnico aplicável

@@ -1,14 +1,14 @@
-# SPEC-011 — Brand Switcher: Ajuste de Layout
+# SPEC-011 — Brand Switcher Interno: Layout
 
-**Status:** Implementado  
-**Tipo:** Layout / Feature  
-**Figma:** [Brand Switcher](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-3733)
+**Status:** Implementado
+**Tipo:** Layout / Feature
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Corrigir e padronizar o layout da tela Brand Switcher para que reflita fielmente o design do Figma. Esta tela é acessada pelo botão grade (⊞) no rodapé das Homes. É uma tela de demonstração (DEV MODE) que permite alternar entre os 3 flavors de marca em tempo real.
+Padronizar o layout da tela interna Brand Switcher conforme a referência visual corporativa. Esta tela é acessada pelo botão grade no rodapé das Homes em builds internos e permite alternar entre as configurações de marca em tempo de execução.
 
 ---
 
@@ -20,8 +20,8 @@ Corrigir e padronizar o layout da tela Brand Switcher para que reflita fielmente
 ├──────────────────────────────────────┤
 │  [Header — bg #1A1A2E]               │
 │  "Brand Switcher"  18sp bold         │
-│  [DEV MODE]  ← badge laranja          │
-│  "Modo de demonstração"  12sp         │
+│  [INTERNO]  ← badge laranja          │
+│  "Validação interna"  12sp         │
 ├──────────────────────────────────────┤
 │  bg: #F4F4F6                         │
 │  padding 20dp top, 16dp horizontal   │
@@ -66,20 +66,20 @@ Corrigir e padronizar o layout da tela Brand Switcher para que reflita fielmente
 ### Header
 - Background: `#1A1A2E`
 - padding: top 16dp, bottom 20dp, horizontal 16dp
-- Posicionamento relativo: badge "DEV MODE" fica posicionado absolutamente no canto superior direito do header
+- Posicionamento relativo: badge "INTERNO" fica posicionado no canto superior direito do header
 
 **Título "Brand Switcher":**
 - 18sp bold, Inter Bold, branco
 - line-height: 27dp
 
-**Badge "DEV MODE":**
+**Badge "INTERNO":**
 - Background: `#F7941D` (sempre laranja, independente da marca)
 - border-radius: 4dp
 - padding: horizontal 8dp, vertical 2dp
 - Texto: 10sp Inter Bold, branco, letter-spacing 0.6
 - Posição: absoluta, alinhado ao topo direito do header (top: 16dp, right: 16dp)
 
-**Subtítulo "Modo de demonstração":**
+**Subtítulo "Validação interna":**
 - 12sp Inter Regular, `rgba(255,255,255,0.45)`
 
 ### Corpo
@@ -193,11 +193,11 @@ fun BrandSwitcherScreen(
 ) {
     val selectedBrand by viewModel.selectedBrand.collectAsState()
     val activeBrand by viewModel.activeBrand.collectAsState()
-    
+
     Column(modifier = Modifier.fillMaxSize()) {
         // Header (bg #1A1A2E)
         BrandSwitcherHeader()
-        
+
         // Body
         Column(
             modifier = Modifier
@@ -207,7 +207,7 @@ fun BrandSwitcherScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(20.dp)
-            
+
             // Section label
             Text(
                 "Selecionar marca".uppercase(),
@@ -220,7 +220,7 @@ fun BrandSwitcherScreen(
                 )
             )
             Spacer(12.dp)
-            
+
             // Cards
             BrandCard.entries.forEach { brand ->
                 BrandOptionCard(
@@ -230,9 +230,9 @@ fun BrandSwitcherScreen(
                 )
                 Spacer(12.dp)
             }
-            
+
             Spacer(modifier = Modifier.weight(1f))
-            
+
             // Botão
             Button(
                 onClick = { viewModel.applyBrand(); onBack() },
@@ -247,7 +247,7 @@ fun BrandSwitcherScreen(
                 Text("Aplicar marca", fontSize = 15.sp, fontWeight = FontWeight.Bold,
                      fontFamily = InterFont)
             }
-            
+
             Text(
                 "As mudanças são aplicadas instantaneamente em todo o app",
                 fontSize = 11.sp,
@@ -272,12 +272,12 @@ fun BrandSwitcherScreen(
 struct BrandSwitcherView: View {
     @StateObject var viewModel = BrandSwitcherViewModel()
     @Environment(\.dismiss) var dismiss
-    
+
     var body: some View {
         VStack(spacing: 0) {
             // Header
             BrandSwitcherHeader()
-            
+
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Selecionar marca".uppercased())
@@ -285,7 +285,7 @@ struct BrandSwitcherView: View {
                         .foregroundColor(Color(hex: "6B7280"))
                         .tracking(0.77)
                         .padding(.top, 20)
-                    
+
                     ForEach(BrandConfig.allBrands) { brand in
                         BrandOptionCard(
                             brand: brand,
@@ -293,9 +293,9 @@ struct BrandSwitcherView: View {
                             onSelect: { viewModel.selectedBrand = brand }
                         )
                     }
-                    
+
                     Spacer(minLength: 24)
-                    
+
                     Button(action: {
                         viewModel.applyBrand()
                         dismiss()
@@ -308,7 +308,7 @@ struct BrandSwitcherView: View {
                     }
                     .background(viewModel.selectedBrand.primary)
                     .cornerRadius(12)
-                    
+
                     Text("As mudanças são aplicadas instantaneamente em todo o app")
                         .font(.custom("Inter-Regular", size: 11))
                         .foregroundColor(Color(hex: "9CA3AF"))
@@ -330,20 +330,20 @@ struct BrandSwitcherView: View {
 
 ## Checklist de Ajuste
 
-- [x] Status bar `#1A1A2E`, ícones brancos (independente da marca ativa)  
-- [x] Header `#1A1A2E`, título 18sp Inter Bold branco  
-- [x] Badge "DEV MODE" laranja `#F7941D`, posição absoluta canto superior direito  
-- [x] Subtítulo "Modo de demonstração" 12sp `rgba(255,255,255,0.45)`  
-- [x] Background do corpo: `#F4F4F6`  
-- [x] Label seção "SELECIONAR MARCA" 11sp uppercase, letter-spacing 0.77  
-- [x] Cards com border 2dp: invisível (não selecionado) / `colorPrimary` (selecionado)  
-- [x] Radio button: borda `#D1D5DB` vs preenchido `colorPrimary`  
-- [x] Brand Avatar 24dp com shape e cor da marca do item  
-- [x] Nome da marca com **fonte da marca do item** (não da ativa)  
-- [x] Descrição 11sp Inter: "{fonte} · {radius}px radius"  
-- [x] Pills de cores com dot + hex, background `rgba(cor, 0.09)`  
-- [x] Check icon 16dp visível apenas no selecionado  
-- [x] Botão "Aplicar marca" com `colorPrimary` da marca **selecionada**  
-- [x] border-radius do botão: 12dp (fixo)  
-- [x] Nota de rodapé 11sp `#9CA3AF`, centralizado  
-- [ ] Ao aplicar: `WhiteLabelConfig` atualizado → toda UI re-renderiza  
+- [x] Status bar `#1A1A2E`, ícones brancos (independente da marca ativa)
+- [x] Header `#1A1A2E`, título 18sp Inter Bold branco
+- [x] Badge "INTERNO" laranja `#F7941D`, posição absoluta canto superior direito
+- [x] Subtítulo "Validação interna" 12sp `rgba(255,255,255,0.45)`
+- [x] Background do corpo: `#F4F4F6`
+- [x] Label seção "SELECIONAR MARCA" 11sp uppercase, letter-spacing 0.77
+- [x] Cards com border 2dp: invisível (não selecionado) / `colorPrimary` (selecionado)
+- [x] Radio button: borda `#D1D5DB` vs preenchido `colorPrimary`
+- [x] Brand Avatar 24dp com shape e cor da marca do item
+- [x] Nome da marca com **fonte da marca do item** (não da ativa)
+- [x] Descrição 11sp Inter: "{fonte} · {radius}px radius"
+- [x] Pills de cores com dot + hex, background `rgba(cor, 0.09)`
+- [x] Check icon 16dp visível apenas no selecionado
+- [x] Botão "Aplicar marca" com `colorPrimary` da marca **selecionada**
+- [x] border-radius do botão: 12dp (fixo)
+- [x] Nota de rodapé 11sp `#9CA3AF`, centralizado
+- [ ] Ao aplicar: `WhiteLabelConfig` atualizado → toda UI re-renderiza

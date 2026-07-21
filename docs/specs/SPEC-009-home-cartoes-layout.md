@@ -1,14 +1,14 @@
 # SPEC-009 — Home de Cartões: Ajuste de Layout e Flavor
 
-**Status:** Pronto para implementação  
-**Tipo:** Layout / Brand  
-**Figma:** [Banco Principal](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-2769) · [Fintech Verde](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-3081) · [Banco Premium](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=34-3400)
+**Status:** Pronto para implementação
+**Tipo:** Layout / Brand
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Corrigir o layout da Home de Cartões para que reflita fielmente o design do Figma, com suporte aos 3 flavors. Inclui o novo **Bottom Tab Switcher** com navegação entre Home Cartões e Home Conta, e botão de Brand Switcher no canto inferior direito.
+Padronizar o layout da Home de Cartões conforme a referência visual corporativa, com suporte às configurações de marca. Inclui o **Bottom Tab Switcher** com navegação entre Home Cartões e Home Conta, e botão de acesso interno ao Brand Switcher.
 
 ---
 
@@ -19,7 +19,7 @@ Corrigir o layout da Home de Cartões para que reflita fielmente o design do Fig
 │  StatusBar (colorPrimary)             │
 ├──────────────────────────────────────┤
 │  [Header]                             │
-│  Avatar  "Olá, Heitor"    [sino]      │
+│  Avatar  "Olá, {nome}"     [sino]      │
 │  padding: 16dp                        │
 ├──────────────────────────────────────┤
 │  [Card Fatura — bg colorPrimary]      │
@@ -38,11 +38,11 @@ Corrigir o layout da Home de Cartões para que reflita fielmente o design do Fig
 ├──────────────────────────────────────┤
 │  Minhas compras          [Ver todas]  │
 │  ┌─────────────────────────────────┐  │
-│  │ [ícone] Amazon   R$ 189,90      │  │
+│  │ [ícone] Compra online R$ 189,90 │  │
 │  │         15 Jul · Online [1/3]   │  │
-│  │ [ícone] iFood    R$ 67,50       │  │
-│  │ [ícone] Posto Shell  R$ 150,00  │  │
-│  │ [ícone] Cinemark R$ 80,00       │  │
+│  │ [ícone] Alimentação R$ 67,50    │  │
+│  │ [ícone] Combustível R$ 150,00   │  │
+│  │ [ícone] Entretenimento R$ 80,00 │  │
 │  └─────────────────────────────────┘  │
 ├──────────────────────────────────────┤
 │  [Cartões ●]  [Conta]     [⊞]        │ ← Bottom Bar
@@ -123,7 +123,7 @@ Corrigir o layout da Home de Cartões para que reflita fielmente o design do Fig
 - Aba inativa ("Conta"): sem preenchimento, texto 14sp medium `colorOnSurface`
 - Animação: `animateColorAsState` (Compose) / `withAnimation` (SwiftUI) na transição
 
-**Botão Grade (direita — abre Brand Switcher):**
+**Botão Grade (direita — abre tela interna de Brand Switcher):**
 - Tamanho: 44dp × 44dp
 - Shape: círculo
 - Background: `colorPrimary`
@@ -151,7 +151,7 @@ Corrigir o layout da Home de Cartões para que reflita fielmente o design do Fig
 
 **Arquivo:** `androidApp/ui/screen/home/HomeScreen.kt` + `androidApp/ui/screen/home/components/`
 
-### Problemas a corrigir:
+### Pontos de implementação:
 1. **Header bg**: usar `colorPrimary` consistente com StatusBar
 2. **Card fatura**: aplicar `borderRadiusDp` da marca, não hardcoded 12
 3. **Bottom Bar**: implementar novo componente `HomeTabBar` com:
@@ -189,9 +189,9 @@ fun HomeTabBar(
                 config = config,
                 modifier = Modifier.weight(1f)
             )
-            
+
             Spacer(16.dp)
-            
+
             // Botão Brand Switcher
             Box(
                 modifier = Modifier
@@ -203,7 +203,7 @@ fun HomeTabBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_grid),
-                    contentDescription = "Brand Switcher",
+                    contentDescription = "Selecionar configuração de marca",
                     tint = Color.White,
                     modifier = Modifier.size(20.dp)
                 )
@@ -219,7 +219,7 @@ fun HomeTabBar(
 
 **Arquivo:** `iosApp/Views/Home/HomeView.swift` (Home de Cartões) + `iosApp/Views/Home/Components/HomeTabBar.swift`
 
-### Problemas a corrigir:
+### Pontos de implementação:
 1. **Header**: aplicar `brandTheme.primary` no ZStack sobre a safe area
 2. **Card fatura**: `cornerRadius(brandTheme.cornerRadius)`, sem hardcoded
 3. **Bottom Bar**: novo `HomeTabBar` com pílula animada e botão grade
@@ -231,7 +231,7 @@ struct HomeTabBar: View {
     @Binding var currentTab: HomeTab
     let onBrandSwitcher: () -> Void
     @Environment(\.brandTheme) var brandTheme
-    
+
     var body: some View {
         HStack(spacing: 16) {
             // Tab Switcher
@@ -255,9 +255,9 @@ struct HomeTabBar: View {
             .padding(4)
             .background(brandTheme.background)
             .clipShape(Capsule())
-            
+
             Spacer()
-            
+
             // Brand Switcher Button
             Button(action: onBrandSwitcher) {
                 Image(systemName: "grid.2x2")
@@ -282,16 +282,16 @@ struct HomeTabBar: View {
 
 ## Checklist de Ajuste
 
-- [x] Status bar `colorPrimary`, ícones brancos  
-- [x] Header `colorPrimary`, avatar 40dp, sino 24dp  
-- [x] Card fatura com `borderRadiusDp` da marca  
-- [x] "Fatura aberta" 12sp, valor 28sp bold  
-- [x] Botões "Pagar fatura" e "Meus cartões" flex-1, altura 44dp  
-- [x] Section "Meu limite" com barra de progresso `colorPrimary`  
-- [x] Lista de compras com ícones 40dp e badge `colorSecondary`  
-- [x] **NOVO** Bottom Bar com pílula switcher Cartões/Conta  
-- [x] Aba ativa pill preenchida `colorPrimary`, inativa sem fill  
-- [x] Animação na troca de aba  
-- [x] **NOVO** Botão grade 44dp círculo `colorPrimary` no canto direito  
-- [x] Botão grade navega para BrandSwitcher  
-- [x] Bottom bar respeita safe area inferior  
+- [x] Status bar `colorPrimary`, ícones brancos
+- [x] Header `colorPrimary`, avatar 40dp, sino 24dp
+- [x] Card fatura com `borderRadiusDp` da marca
+- [x] "Fatura aberta" 12sp, valor 28sp bold
+- [x] Botões "Pagar fatura" e "Meus cartões" flex-1, altura 44dp
+- [x] Section "Meu limite" com barra de progresso `colorPrimary`
+- [x] Lista de compras com ícones 40dp e badge `colorSecondary`
+- [x] **NOVO** Bottom Bar com pílula switcher Cartões/Conta
+- [x] Aba ativa pill preenchida `colorPrimary`, inativa sem fill
+- [x] Animação na troca de aba
+- [x] **NOVO** Botão grade 44dp círculo `colorPrimary` no canto direito
+- [x] Botão grade navega para BrandSwitcher
+- [x] Bottom bar respeita safe area inferior

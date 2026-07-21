@@ -1,24 +1,22 @@
 # SPEC-002: Saldo e Extrato de Conta
 
-**Status:** Aprovado  
-**Versão:** 1.0  
-**Data:** 2026-07-17  
-**Feature owner:** Time Mobile  
-**Figma:**
-- Home / Conta: [`29:21243`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-21243&m=dev)
-- Cartões: [`29:22301`](https://www.figma.com/design/i0v5vLAdG0PMWZ6bYwUb0h/Mobile-One?node-id=29-22301&m=dev)
+**Status:** Aprovado
+**Versão:** 1.0
+**Data:** 2026-07-17
+**Feature owner:** Time Mobile
+**Referência visual:** consultar [`docs/figma/design-system.md`](../figma/design-system.md) após atualização com o Figma corporativo
 
 ---
 
 ## Objetivo
 
-Implementar a tela principal (Home) com exibição de saldo e extrato de transações, demonstrando a capacidade de **offline-first** via SQLDelight, **paginação** e **estado reativo** compartilhados entre Android e iOS.
+Implementar a tela principal (Home) com exibição de saldo e extrato de transações, validando **offline-first** via SQLDelight, **paginação** e **estado reativo** compartilhados entre Android e iOS.
 
 ---
 
-## Escopo da POC
+## Escopo da feature
 
-Esta feature demonstra:
+Esta feature valida:
 - ✅ Repositório com estratégia offline-first (cache SQLDelight → API Ktor)
 - ✅ Paginação de extrato via `Flow<PagingData<Transaction>>` compartilhado
 - ✅ Formatação de valores monetários no shared (sem depender de locale nativo)
@@ -188,7 +186,7 @@ class CurrencyFormatterTest {
 
 ---
 
-## Critérios de aceite da POC
+## Critérios de aceite
 
 - [ ] Saldo exibido imediatamente ao abrir (dados do cache)
 - [ ] Pull-to-refresh funciona em Android e iOS consumindo o mesmo use case
