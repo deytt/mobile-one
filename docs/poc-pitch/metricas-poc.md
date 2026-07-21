@@ -165,20 +165,35 @@ Isso quantifica o benefício do código compartilhado para gestores: "Neste spri
 
 ---
 
-## Dashboard de apresentação (sugerido)
+## Resultados reais (snapshot)
+
+Os números medidos no código estão em **[metricas-resultados.md](metricas-resultados.md)** (2026-07-21).
+
+Resumo: lógica de negócio **100%** em `commonMain`; módulo `shared` ≈ **21%** do app (UI nativa domina o LOC); **88** testes no shared, **0** falhas, Android + iOS Simulator.
+
+Reproduzir:
+
+```bash
+python3 scripts/measure_code_metrics.py
+./gradlew :shared:allTests
+```
+
+---
+
+## Dashboard de apresentação (números reais — 2026-07-21)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                      mobile-one POC — Resultados                │
+│                 mobile-one POC — Resultados                     │
 ├───────────────────┬─────────────────────────────────────────────┤
-│ Código compartilh.│ ████████████████░░░░ 72%                    │
-│ Cobertura testes  │ ████████████████████ 81%                    │
-│ Features completas│ ████████████████████ 4/4 ✓                  │
+│ Shared / app      │ ████░░░░░░░░░░░░░░░░ 21% (code)             │
+│ Negócio commonMain│ ████████████████████ 100%                   │
+│ Testes shared     │ 88 ✅ · 0 falhas · Android + iOS             │
+│ Use cases c/ teste│ ████████████░░░░░░░░ 9/14 (64%)             │
 │ Plataformas       │ Android ✓    iOS ✓                          │
 ├───────────────────┴─────────────────────────────────────────────┤
-│ Bugs de lógica encontrados: 7 → corrigidos 1x → fixados em 2   │
-│ Tempo de biometria: Android 12ms · iOS 14ms (nativo puro)       │
-│ Tamanho binário: Android 28MB · iOS 31MB                        │
+│ Meta “70–80% shared” = camada dados+domínio (atingida a 100%).  │
+│ % do app total é menor porque a UI é 100% nativa (tese KMP).    │
 └─────────────────────────────────────────────────────────────────┘
 ```
 

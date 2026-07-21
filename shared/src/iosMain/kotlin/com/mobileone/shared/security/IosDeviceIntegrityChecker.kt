@@ -8,11 +8,15 @@ import platform.Foundation.NSProcessInfo
  */
 class IosDeviceIntegrityChecker : DeviceIntegrityChecker {
 
-    override suspend fun check(): IntegrityStatus = IntegrityStatus(
-        isRooted = hasJailbreakIndicators(),
-        isEmulator = isSimulator(),
-        isDebuggable = false
-    )
+    override suspend fun check(): IntegrityStatus {
+        val simulator = isSimulator()
+        return IntegrityStatus(
+            // Simulator tem paths Unix (/bin/bash etc.) que geram falso positivo de jailbreak.
+            isRooted = if (simulator) false else hasJailbreakIndicators(),
+            isEmulator = simulator,
+            isDebuggable = false
+        )
+    }
 
     private fun hasJailbreakIndicators(): Boolean {
         val fileManager = NSFileManager.defaultManager

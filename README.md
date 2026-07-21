@@ -51,7 +51,7 @@ mobile-one/
 │   ├── assets/screenshots/ # Previews das telas (3 marcas) para o README
 │   ├── adr/                # Architecture Decision Records — decisões e argumentos
 │   ├── specs/              # Especificações de features e contratos de interface
-│   └── poc-pitch/          # Material de apresentação para gestores
+│   └── poc-pitch/          # Material de apresentação + métricas reais
 ├── shared/                 # KMP — Kotlin Multiplatform (dados + domínio)
 ├── androidApp/             # Android — Jetpack Compose
 └── iosApp/                 # iOS — SwiftUI
@@ -59,15 +59,17 @@ mobile-one/
 
 ## Documentação
 
-### Architecture Decision Records
+### Architecture Decision Records (ADRs)
 
-| ADR | Título | Status |
-|---|---|---|
-| [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md) | KMP com UI Nativa vs React Native | Aceito |
-| [ADR-002](docs/adr/ADR-002-sqldelight-persistencia.md) | SQLDelight como persistência compartilhada | Aceito |
-| [ADR-003](docs/adr/ADR-003-ktor-http-client.md) | Ktor como HTTP client compartilhado | Aceito |
-| [ADR-004](docs/adr/ADR-004-white-label-strategy.md) | Estratégia white-label via shared config | Aceito |
-| [ADR-005](docs/adr/ADR-005-biometria-expect-actual.md) | Biometria e segurança via expect/actual | Aceito |
+As decisões arquiteturais da POC ficam em `docs/adr/`. Elas explicam o racional técnico usado no pitch para comparar KMP + UI nativa com React Native.
+
+| ADR | Decisão | Por que importa para a POC | Status |
+|---|---|---|---|
+| [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md) | KMP com UI nativa vs React Native | Define a tese central: compartilhar dados/domínio e preservar UX nativa | Aceito |
+| [ADR-002](docs/adr/ADR-002-sqldelight-persistencia.md) | SQLDelight como persistência compartilhada | Mantém schema e queries em Kotlin Multiplatform, com drivers nativos | Aceito |
+| [ADR-003](docs/adr/ADR-003-ktor-http-client.md) | Ktor como HTTP client compartilhado | Evita duplicar camada de rede entre Android e iOS | Aceito |
+| [ADR-004](docs/adr/ADR-004-white-label-strategy.md) | Estratégia white-label via shared config | Centraliza marcas, tokens e feature flags no `shared` | Aceito |
+| [ADR-005](docs/adr/ADR-005-biometria-expect-actual.md) | Biometria e segurança via `expect/actual` | Usa APIs nativas para Face ID/Touch ID, BiometricPrompt e armazenamento seguro | Aceito |
 
 ### Specs de Features (POC)
 
@@ -82,7 +84,46 @@ mobile-one/
 
 - [Comparativo KMP vs React Native](docs/poc-pitch/comparativo-kmp-vs-react-native.md)
 - [Roadmap de Migração](docs/poc-pitch/roadmap-migracao.md)
-- [Métricas da POC](docs/poc-pitch/metricas-poc.md)
+- [Métricas da POC (guia)](docs/poc-pitch/metricas-poc.md)
+- [Métricas reais — snapshot 2026-07-21](docs/poc-pitch/metricas-resultados.md)
+
+## Métricas de código (2026-07-21)
+
+Medição reproduzível: `python3 scripts/measure_code_metrics.py` · testes: `./gradlew :shared:allTests`.
+
+Detalhamento completo em [docs/poc-pitch/metricas-resultados.md](docs/poc-pitch/metricas-resultados.md).
+
+### Compartilhamento
+
+| Métrica | Valor |
+|---|---|
+| Módulo `shared` / app total (LOC code) | **20,6%** (2 220 / 10 765) |
+| Só `commonMain` / app total | **14,1%** (1 514 / 10 765) |
+| `commonMain` dentro do módulo `shared` | **68%** |
+| Lógica de negócio (domain + data + config) | **100%** em `commonMain` |
+| Use cases + validadores | **100%** compartilhados |
+
+| Source set | Arquivos | LOC (code) |
+|---|---:|---:|
+| `shared/commonMain` | 64 | 1 514 |
+| `shared/androidMain` + `iosMain` | 18 | 706 |
+| `androidApp` (Compose) | 40 | 5 179 |
+| `iosApp` (SwiftUI) | 36 | 3 366 |
+
+O % do app total fica abaixo da meta antiga de “65–80%” porque a **UI é 100% nativa** (Compose/SwiftUI) e concentra a maior parte das linhas — exatamente a tese do [ADR-001](docs/adr/ADR-001-kmp-vs-react-native.md): compartilhar regras de negócio, não a UI.
+
+### Cobertura de testes (shared)
+
+| Indicador | Valor |
+|---|---|
+| Testes em `commonTest` | **88** |
+| Falhas | **0** |
+| Plataformas | Android JVM + iOS Simulator (mesma suíte) |
+| Use cases com teste dedicado | **9 / 14 (64%)** |
+| White-label / config | **100%** dos arquivos com teste |
+| Validadores | Cobertura alta via `AuthValidatorTest` + `ValidatePixKeyUseCaseTest` |
+
+Lacunas prioritárias: `ExecutePixTransferUseCase`, `DetectPixKeyTypeUseCase`, `LookupPixRecipientUseCase`, `RefreshAccountDataUseCase`, `ToggleBalanceVisibilityUseCase`.
 
 ## Stack
 
@@ -98,26 +139,84 @@ mobile-one/
 
 ## Como rodar o projeto
 
-Pré-requisitos: JDK 17, Android SDK (`ANDROID_HOME`), Xcode e [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+### Pré-requisitos
+
+- JDK 17
+- Android Studio com Android SDK 36 e `ANDROID_HOME` configurado
+- Xcode com simulador iOS 17+
+- [XcodeGen](https://github.com/yonaskolb/XcodeGen): `brew install xcodegen`
+
+### 1. Validar o módulo compartilhado
+
+Antes de subir os apps, valide que o `shared` compila e que a mesma suíte de testes roda nas duas plataformas:
 
 ```bash
-# Shared — compilar e testar (Android + iOS Simulator)
 ./gradlew :shared:build
 ./gradlew :shared:allTests
+```
 
-# Android — gerar o APK debug
+### 2. Subir o app Android
+
+Via terminal:
+
+```bash
+# Gerar APK debug
 ./gradlew :androidApp:assembleDebug
 
-# iOS — gerar o projeto Xcode e buildar para o simulador
+# Instalar em emulador/dispositivo conectado
+./gradlew :androidApp:installDebug
+```
+
+Via Android Studio:
+
+1. Abra a raiz do repositório `mobile-one/`.
+2. Aguarde o sync do Gradle terminar.
+3. Selecione a configuração `androidApp`.
+4. Escolha um emulador ou dispositivo físico.
+5. Clique em Run.
+
+### 3. Subir o app iOS
+
+O projeto Xcode é gerado a partir de `iosApp/project.yml`, então gere o `.xcodeproj` antes de abrir no Xcode:
+
+```bash
+cd iosApp
+xcodegen generate
+open iosApp.xcodeproj
+```
+
+No Xcode:
+
+1. Selecione o scheme `iosApp`.
+2. Escolha um simulador iOS 17+, por exemplo `iPhone 17 Pro`.
+3. Clique em Run.
+
+Também é possível buildar pelo terminal:
+
+```bash
 cd iosApp
 xcodegen generate
 xcodebuild -project iosApp.xcodeproj -scheme iosApp \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro' build
 ```
 
-O `iosApp.xcodeproj` é gerado a partir de `iosApp/project.yml` (não é versionado à mão) e
-possui uma fase de build que roda `./gradlew :shared:embedAndSignAppleFrameworkForXcode`
-automaticamente antes de compilar o app, para embutir o framework `shared` mais recente.
+O target iOS possui uma fase de build que executa `./gradlew :shared:embedAndSignAppleFrameworkForXcode` automaticamente, embutindo o framework KMP `shared` mais recente no app.
+
+### 4. Comandos úteis
+
+```bash
+# Métricas de compartilhamento de código
+python3 scripts/measure_code_metrics.py
+
+# Testes do shared nas plataformas configuradas
+./gradlew :shared:allTests
+
+# Build Android debug
+./gradlew :androidApp:assembleDebug
+
+# Regenerar projeto iOS
+cd iosApp && xcodegen generate
+```
 
 ## Workflow de desenvolvimento
 
@@ -132,8 +231,9 @@ automaticamente antes de compilar o app, para embutir o framework `shared` mais 
 
 Este projeto é uma POC criada pelo time de desenvolvimento Android/iOS de um banco para demonstrar aos gestores que existe uma alternativa ao React Native que:
 
-- Compartilha **70–80% do código** (camadas de dados e domínio)
+- Compartilha **100% da lógica de negócio** (domain + data + config em `commonMain`); o módulo `shared` representa ~**21%** do LOC do app com UI nativa já implementada
 - Mantém **performance 100% nativa** sem bridges JavaScript
 - Preserva o **know-how técnico** do time atual
 - Suporta **white-label** via configuração no shared
 - É viável para um **app bancário regulado** pelo Banco Central
+- Valida a lógica com **88 testes** que rodam iguais em Android e iOS
