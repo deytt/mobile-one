@@ -172,10 +172,26 @@ Figma.*
 
 ---
 
-## Sprint 4 — Fluxo PIX + Métricas finais — planejado
+## Sprint 4 — Fluxo PIX + Métricas finais — em andamento
 
-- [ ] Fluxo PIX Android (8 telas, node `15:9848`)
-- [ ] Fluxo PIX iOS
-- [ ] Coletar métricas de % código compartilhado
+- [x] Fluxo PIX Android / iOS (implementado nas UIs nativas)
+- [x] Coletar métricas de % código compartilhado e cobertura de testes — **2026-07-18**
+- [x] Recoletar métricas de % código compartilhado e cobertura de testes — **2026-07-21**
+- [x] Documentar em [`metricas-resultados.md`](metricas-resultados.md) + README
 - [ ] Preparar demo para gestores
-- [ ] Atualizar `docs/poc-pitch/metricas-poc.md` com dados reais
+- [ ] Adicionar Kover para cobertura de linhas instrumentada no `:shared`
+
+### Métricas (2026-07-21)
+
+| Métrica | Valor |
+|---|---|
+| Linhas `commonMain` (code / physical) | 1 514 / 2 135 |
+| Linhas módulo `shared` (code / physical) | 2 220 / 3 063 |
+| Linhas `androidApp` (code / physical) | 5 179 / 5 704 |
+| Linhas `iosApp` (code / physical) | 3 366 / 3 855 |
+| % módulo shared / total (code) | **20,6%** |
+| % commonMain / total (code) | **14,1%** |
+| % lógica de negócio em commonMain | **100%** |
+| Testes shared | **88** (0 falhas) · Android JVM + iOS Simulator |
+| Use cases com teste dedicado | **9 / 14 (64%)** |
+| Script de medição | `scripts/measure_code_metrics.py` |
